@@ -1,5 +1,6 @@
 package com.shpak.stopwatch
 
+import android.app.AlertDialog
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -54,7 +55,7 @@ class StopwatchTileService : TileService() {
     override fun onClick() {
         super.onClick()
 
-        showNotification()
+        showDialog()
     }
 
     override fun onDestroy() {
@@ -72,6 +73,16 @@ class StopwatchTileService : TileService() {
         }
 
         startActivity(intent)
+    }
+
+    private fun showDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Attention")
+            .setMessage("Notifications permission is required for Quick Stopwatch to work")
+            .setPositiveButton("Grant in settings") { _, _ -> }
+            .setNegativeButton("Deny") { _, _ -> }
+
+        this.showDialog(builder.create())
     }
 
     private fun showNotification() {

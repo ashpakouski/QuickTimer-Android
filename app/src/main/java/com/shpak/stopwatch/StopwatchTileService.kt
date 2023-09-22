@@ -1,5 +1,6 @@
 package com.shpak.stopwatch
 
+import android.Manifest
 import android.app.AlertDialog
 import android.app.Notification
 import android.app.NotificationChannel
@@ -12,11 +13,13 @@ import android.content.Intent.CATEGORY_DEFAULT
 import android.content.Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.service.quicksettings.TileService
-import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import java.util.Timer
 import java.util.TimerTask
 
@@ -55,7 +58,7 @@ class StopwatchTileService : TileService() {
     override fun onClick() {
         super.onClick()
 
-        showDialog()
+        isNotificationsPermissionGranted()
     }
 
     override fun onDestroy() {
@@ -83,6 +86,17 @@ class StopwatchTileService : TileService() {
             .setNegativeButton("Deny") { _, _ -> }
 
         this.showDialog(builder.create())
+    }
+
+    private fun isNotificationsPermissionGranted(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
+        }
     }
 
     private fun showNotification() {

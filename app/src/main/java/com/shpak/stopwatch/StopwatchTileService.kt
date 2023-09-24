@@ -1,7 +1,6 @@
 package com.shpak.stopwatch
 
 import android.Manifest
-import android.app.AlertDialog
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -20,6 +19,7 @@ import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.service.quicksettings.TileService
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import com.shpak.stopwatch.dialog.NotificationPermissionRequestDialog
 import java.util.Timer
 import java.util.TimerTask
 
@@ -58,7 +58,7 @@ class StopwatchTileService : TileService() {
     override fun onClick() {
         super.onClick()
 
-        isNotificationsPermissionGranted()
+        NotificationPermissionRequestDialog.show(this)
     }
 
     override fun onDestroy() {
@@ -76,16 +76,6 @@ class StopwatchTileService : TileService() {
         }
 
         startActivity(intent)
-    }
-
-    private fun showDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Attention")
-            .setMessage("Notifications permission is required for Quick Stopwatch to work")
-            .setPositiveButton("Grant in settings") { _, _ -> }
-            .setNegativeButton("Deny") { _, _ -> }
-
-        this.showDialog(builder.create())
     }
 
     private fun isNotificationsPermissionGranted(): Boolean {

@@ -1,4 +1,4 @@
-package com.shpak.stopwatch
+package com.shpak.quicktimer
 
 import android.Manifest
 import android.app.Notification
@@ -19,11 +19,11 @@ import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.service.quicksettings.TileService
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import com.shpak.stopwatch.dialog.NotificationPermissionRequestDialog
+import com.shpak.quicktimer.dialog.NotificationPermissionRequestDialog
 import java.util.Timer
 import java.util.TimerTask
 
-class StopwatchTileService : TileService() {
+class TimerTileService : TileService() {
     companion object {
         private const val ACTION_START = "actionStart"
         private const val ACTION_RESUME = "actionResume"

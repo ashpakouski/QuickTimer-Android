@@ -1,4 +1,4 @@
-package com.shpak.stopwatch
+package com.shpak.quicktimer
 
 import org.junit.Test
 

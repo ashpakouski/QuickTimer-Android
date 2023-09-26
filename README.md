@@ -1,4 +1,4 @@
-## Quick Stopwatch
+## Quick Timer
 
 # TODO:
 1. Find a way to request notifications permission in user-friendly way

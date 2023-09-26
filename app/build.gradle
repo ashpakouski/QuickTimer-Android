@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.shpak.stopwatch'
+    namespace 'com.shpak.quicktimer'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.shpak.stopwatch"
+        applicationId "com.shpak.quicktimer"
         minSdk 26
         targetSdk 33
         versionCode 1

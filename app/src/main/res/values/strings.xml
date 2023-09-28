@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Quick Timer</string>
+    <string name="select_time_title">Select time</string>
+    <string name="button_start">Start</string>
+    <string name="button_cancel">Cancel</string>
 </resources>

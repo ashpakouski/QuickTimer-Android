@@ -9,8 +9,9 @@ import com.shpak.quicktimer.R
 
 object TimerSettingsDialog {
     fun show(tileService: TileService) {
+        val context = tileService.applicationContext
         val layoutInflater =
-            tileService.applicationContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val dialogView = layoutInflater.inflate(R.layout.timer_settings_layout, null)
 
         dialogView.findViewById<NumberPicker>(R.id.hours_picker).also {
@@ -33,10 +34,10 @@ object TimerSettingsDialog {
 
         val builder = AlertDialog.Builder(tileService)
 
-        builder.setTitle("Select time")
+        builder.setTitle(context.getString(R.string.select_time_title))
             .setView(dialogView)
-            .setPositiveButton("Start") { _, _ -> }
-            .setNegativeButton("Cancel") { _, _ -> }
+            .setPositiveButton(context.getString(R.string.button_start)) { _, _ -> }
+            .setNegativeButton(context.getString(R.string.button_cancel)) { _, _ -> }
         tileService.showDialog(builder.create())
     }
 }

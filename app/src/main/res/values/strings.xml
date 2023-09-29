@@ -3,4 +3,7 @@
     <string name="select_time_title">Select time</string>
     <string name="button_start">Start</string>
     <string name="button_cancel">Cancel</string>
+    <string name="notifications_permission_request_message">Allow %s to display notification?</string>
+    <string name="notification_permission_request_option_grant">Grant in settings</string>
+    <string name="notification_permission_request_option_deny">Deny</string>
 </resources>

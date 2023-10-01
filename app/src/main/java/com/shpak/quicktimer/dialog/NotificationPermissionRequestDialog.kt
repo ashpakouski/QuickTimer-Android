@@ -18,7 +18,8 @@ object NotificationPermissionRequestDialog {
                     tileService.getString(R.string.app_name)
                 )
             )
-            .setPositiveButton(tileService.getText(R.string.notification_permission_request_option_grant)) { _, _ ->
+            .setPositiveButton(tileService.getText(R.string.notification_permission_request_option_grant)) { dialog, _ ->
+                dialog.dismiss()
                 onRequestGranted?.invoke()
             }
             .setNegativeButton(R.string.notification_permission_request_option_deny) { dialog, _ ->

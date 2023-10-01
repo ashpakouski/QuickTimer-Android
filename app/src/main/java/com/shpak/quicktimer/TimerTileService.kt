@@ -1,6 +1,5 @@
 package com.shpak.quicktimer
 
-import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -12,14 +11,13 @@ import android.content.Intent.CATEGORY_DEFAULT
 import android.content.Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.IntentFilter
-import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.service.quicksettings.TileService
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import com.shpak.quicktimer.dialog.NotificationPermissionRequestDialog
+import com.shpak.quicktimer.dialog.TimerSettingsDialog
+import com.shpak.quicktimer.utils.areNotificationsEnabled
 import java.util.Timer
 import java.util.TimerTask
 
@@ -58,7 +56,15 @@ class TimerTileService : TileService() {
     override fun onClick() {
         super.onClick()
 
-        NotificationPermissionRequestDialog.show(this)
+        if (areNotificationsEnabled(applicationContext)) {
+            TimerSettingsDialog.show(this)
+        } else {
+            NotificationPermissionRequestDialog.show(
+                this,
+                onRequestGranted = {
+                    redirectToAppSettings()
+                })
+        }
     }
 
     override fun onDestroy() {
@@ -76,17 +82,6 @@ class TimerTileService : TileService() {
         }
 
         startActivity(intent)
-    }
-
-    private fun isNotificationsPermissionGranted(): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
-        } else {
-            true
-        }
     }
 
     private fun showNotification() {

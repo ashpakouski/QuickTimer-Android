@@ -24,7 +24,7 @@
         </activity>
 
         <service
-            android:name=".TimerTileService"
+            android:name=".service.TimerTileService"
             android:exported="true"
             android:icon="@drawable/ic_launcher_foreground"
             android:label="Label"

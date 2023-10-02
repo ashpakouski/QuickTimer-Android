@@ -1,4 +1,4 @@
-package com.shpak.quicktimer.utils
+package com.shpak.quicktimer.util
 
 import android.Manifest
 import android.app.NotificationManager

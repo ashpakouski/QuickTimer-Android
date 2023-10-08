@@ -13,4 +13,11 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="TimerSettingsDialog" parent="MaterialAlertDialog.Material3">
+        <item name="android:background">@color/teal_200</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="NumberPickerStyle" parent="Theme.MaterialComponents.DayNight" />
 </resources>

@@ -3,8 +3,10 @@ package com.shpak.quicktimer.dialog
 import android.app.AlertDialog
 import android.content.Context
 import android.service.quicksettings.TileService
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.widget.NumberPicker
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.shpak.quicktimer.R
 
 object TimerSettingsDialog {
@@ -32,7 +34,12 @@ object TimerSettingsDialog {
             it.value = 0
         }
 
-        val builder = AlertDialog.Builder(tileService)
+        val builder = AlertDialog.Builder(
+            ContextThemeWrapper(
+                tileService.applicationContext,
+                R.style.TimerSettingsDialog
+            )
+        )
 
         builder.setTitle(context.getString(R.string.select_time_title))
             .setView(dialogView)

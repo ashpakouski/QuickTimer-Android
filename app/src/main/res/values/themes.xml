@@ -13,4 +13,10 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="TimerSettingsDialog" parent="MaterialAlertDialog.Material3">
+        <item name="android:background">@color/purple_500</item>
+    </style>
+
+    <style name="NumberPickerStyle" parent="Theme.MaterialComponents.Light" />
 </resources>

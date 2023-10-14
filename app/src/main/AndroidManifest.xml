@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
@@ -33,6 +34,10 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
+
+        <service
+            android:name=".service.TimerService"
+            android:foregroundServiceType="dataSync" />
     </application>
 
 </manifest>

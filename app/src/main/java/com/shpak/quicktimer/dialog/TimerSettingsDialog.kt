@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.widget.NumberPicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.shpak.quicktimer.R
+import com.shpak.quicktimer.service.TimerService
 
 object TimerSettingsDialog {
     fun show(tileService: TileService) {
@@ -43,7 +44,9 @@ object TimerSettingsDialog {
 
         builder.setTitle(context.getString(R.string.select_time_title))
             .setView(dialogView)
-            .setPositiveButton(context.getString(R.string.button_start)) { _, _ -> }
+            .setPositiveButton(context.getString(R.string.button_start)) { _, _ ->
+                TimerService.start(context)
+            }
             .setNegativeButton(context.getString(R.string.button_cancel)) { _, _ -> }
         tileService.showDialog(builder.create())
     }

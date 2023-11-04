@@ -1,4 +1,4 @@
-package com.shpak.quicktimer.dialog
+package com.shpak.quicktimer.presentation
 
 import android.app.AlertDialog
 import android.service.quicksettings.TileService

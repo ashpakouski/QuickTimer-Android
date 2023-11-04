@@ -1,4 +1,4 @@
-package com.shpak.quicktimer.service
+package com.shpak.quicktimer.presentation
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -12,8 +12,6 @@ import android.content.IntentFilter
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.shpak.quicktimer.R
-import java.util.Timer
-import java.util.TimerTask
 
 class TimerService : Service() {
     companion object {

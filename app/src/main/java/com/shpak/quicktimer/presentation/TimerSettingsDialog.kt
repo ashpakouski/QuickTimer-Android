@@ -1,4 +1,4 @@
-package com.shpak.quicktimer.dialog
+package com.shpak.quicktimer.presentation
 
 import android.app.AlertDialog
 import android.content.Context
@@ -6,9 +6,7 @@ import android.service.quicksettings.TileService
 import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.widget.NumberPicker
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.shpak.quicktimer.R
-import com.shpak.quicktimer.service.TimerService
 
 object TimerSettingsDialog {
     fun show(tileService: TileService) {

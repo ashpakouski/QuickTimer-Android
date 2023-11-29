@@ -8,11 +8,12 @@ import android.service.quicksettings.TileService
 import com.shpak.quicktimer.util.areNotificationsEnabled
 import com.shpak.quicktimer.util.redirectToAppSettings
 
-class TimerTileService : TileService() {
+// It behaves more like a View than like a Service, so let's give this naming a try
+class TimerTileView : TileService() {
 
     private val configurationChangeReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-
+            TODO("Redraw dialog, if theme changes")
         }
     }
 

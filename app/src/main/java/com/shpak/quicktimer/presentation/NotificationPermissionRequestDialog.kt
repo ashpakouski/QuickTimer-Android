@@ -1,24 +1,25 @@
 package com.shpak.quicktimer.presentation
 
 import android.app.AlertDialog
-import android.service.quicksettings.TileService
+import android.app.Dialog
+import android.content.Context
 import com.shpak.quicktimer.R
 
 object NotificationPermissionRequestDialog {
-    fun show(
-        tileService: TileService,
+    fun build(
+        context: Context,
         onRequestGranted: (() -> Unit)? = null,
         onRequestDenied: (() -> Unit)? = null
-    ) {
-        val dialog = AlertDialog.Builder(tileService)
+    ): Dialog {
+        val dialogBuilder = AlertDialog.Builder(context)
             .setIcon(R.drawable.ic_launcher_foreground)
             .setMessage(
-                tileService.getString(
+                context.getString(
                     R.string.notifications_permission_request_message,
-                    tileService.getString(R.string.app_name)
+                    context.getString(R.string.app_name)
                 )
             )
-            .setPositiveButton(tileService.getText(R.string.notification_permission_request_option_grant)) { dialog, _ ->
+            .setPositiveButton(context.getText(R.string.notification_permission_request_option_grant)) { dialog, _ ->
                 dialog.dismiss()
                 onRequestGranted?.invoke()
             }
@@ -26,7 +27,7 @@ object NotificationPermissionRequestDialog {
                 dialog.dismiss()
                 onRequestDenied?.invoke()
             }
-            .create()
-        tileService.showDialog(dialog)
+
+        return dialogBuilder.create()
     }
 }

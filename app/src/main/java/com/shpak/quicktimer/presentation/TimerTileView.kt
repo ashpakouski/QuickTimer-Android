@@ -30,13 +30,20 @@ class TimerTileView : TileService() {
         super.onClick()
 
         if (areNotificationsEnabled(applicationContext)) {
-            TimerSettingsDialog.show(this)
+            showDialog(TimerSettingsDialog.get(applicationContext))
         } else {
-            NotificationPermissionRequestDialog.show(
-                this,
-                onRequestGranted = {
-                    redirectToAppSettings(applicationContext)
-                })
+            requestNotificationsPermission()
+        }
+    }
+
+    private fun requestNotificationsPermission() {
+        NotificationPermissionRequestDialog.build(
+            applicationContext,
+            onRequestGranted = {
+                redirectToAppSettings(applicationContext)
+            }
+        ).apply {
+            showDialog(this)
         }
     }
 

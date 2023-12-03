@@ -9,7 +9,7 @@ import com.shpak.quicktimer.util.areNotificationsEnabled
 import com.shpak.quicktimer.util.redirectToAppSettings
 
 // It behaves more like a View than like a Service, so let's give this naming a try
-class TimerTileView : TileService() {
+class TimerTileViewController : TileService() {
 
     private val configurationChangeReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -30,10 +30,21 @@ class TimerTileView : TileService() {
         super.onClick()
 
         if (areNotificationsEnabled(applicationContext)) {
-            showDialog(TimerSettingsDialog.get(applicationContext))
+            showTimerSettingsDialog()
         } else {
             requestNotificationsPermission()
         }
+    }
+
+    private fun showTimerSettingsDialog() {
+        showDialog(
+            TimerSettingsDialog.build(
+                applicationContext,
+                onTimerSet = { timeMillis ->
+                    TimerService.start(applicationContext, timeMillis)
+                }
+            )
+        )
     }
 
     private fun requestNotificationsPermission() {

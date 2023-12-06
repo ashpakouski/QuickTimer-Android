@@ -14,7 +14,7 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="TimerSettingsDialog" parent="Theme.Material3.Dark.Dialog" />
+    <style name="QuickTimerAppDialog" parent="Theme.Material3.Dark.Dialog" />
 
     <style name="NumberPickerStyle" parent="Theme.MaterialComponents.DayNight" />
 </resources>

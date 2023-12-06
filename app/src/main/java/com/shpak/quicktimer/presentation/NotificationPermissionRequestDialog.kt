@@ -3,6 +3,7 @@ package com.shpak.quicktimer.presentation
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.view.ContextThemeWrapper
 import com.shpak.quicktimer.R
 
 object NotificationPermissionRequestDialog {
@@ -11,7 +12,12 @@ object NotificationPermissionRequestDialog {
         onRequestGranted: (() -> Unit)? = null,
         onRequestDenied: (() -> Unit)? = null
     ): Dialog {
-        val dialogBuilder = AlertDialog.Builder(context)
+        val dialogBuilder = AlertDialog.Builder(
+            ContextThemeWrapper(
+                context,
+                R.style.QuickTimerAppDialog
+            )
+        )
             .setIcon(R.drawable.ic_launcher_foreground)
             .setMessage(
                 context.getString(

@@ -27,7 +27,7 @@ object TimerSettingsDialog {
         val builder = AlertDialog.Builder(
             ContextThemeWrapper(
                 context,
-                R.style.TimerSettingsDialog
+                R.style.QuickTimerAppDialog
             )
         )
 

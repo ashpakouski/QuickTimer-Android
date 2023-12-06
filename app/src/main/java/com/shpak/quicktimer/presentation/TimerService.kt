@@ -10,8 +10,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
-import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.shpak.quicktimer.R
 import java.util.Timer
 import java.util.TimerTask
@@ -47,7 +47,13 @@ class TimerService : Service() {
         startAsForeground()
 
         notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        registerReceiver(buttonClickReceiver, IntentFilter(ACTION_START))
+
+        ContextCompat.registerReceiver(
+            applicationContext,
+            buttonClickReceiver,
+            IntentFilter(ACTION_START),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
 
         super.onCreate()
     }

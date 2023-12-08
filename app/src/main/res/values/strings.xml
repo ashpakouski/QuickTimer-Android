@@ -6,4 +6,5 @@
     <string name="notifications_permission_request_message">Allow %s to display notification?</string>
     <string name="notification_permission_request_option_grant">Grant in settings</string>
     <string name="notification_permission_request_option_deny">Deny</string>
+    <string name="tile_label">Timer</string>
 </resources>

@@ -18,42 +18,73 @@ import com.shpak.quicktimer.timer.TimerListener
 
 class TimerService : Service(), TimerListener {
     companion object {
-        private const val ACTION_START = "actionStart"
-        private const val ACTION_RESUME = "actionResume"
-        private const val ACTION_RESET = "actionReset"
+        private const val ACTION_PAUSE = "action_pause"
+        private const val ACTION_RESUME = "action_resume"
+        private const val ACTION_CANCEL = "action_cancel"
 
-        private const val TIME_MILLIS_KEY = "timeMillis"
+        private const val TIME_MILLIS_KEY = "time_millis"
         private const val NOTIFICATION_ID = 1
 
         fun start(context: Context, timeMillis: Long) {
             val startIntent = Intent(context, TimerService::class.java)
-            startIntent.putExtra("timeMillis", timeMillis)
+            startIntent.putExtra(TIME_MILLIS_KEY, timeMillis)
             context.startForegroundService(startIntent)
         }
     }
 
     private val timer: CountdownTimer = CountdownTimer(this)
 
-    private lateinit var notificationManager: NotificationManager
-    private lateinit var notificationBuilder: NotificationCompat.Builder
+    // Can't be "just" val, because context is null during the object initialization
+    private val notificationManager: NotificationManager by lazy {
+        getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+    }
+
+    private val baseNotificationBuilder: NotificationCompat.Builder
+        get() {
+            val notificationChannel = NotificationChannel(
+                "NOTIFICATION_CHANNEL_ID",
+                "NOTIFICATION_CHANNEL_NAME",
+                NotificationManager.IMPORTANCE_MIN
+            )
+
+            notificationManager.createNotificationChannel(notificationChannel)
+
+            return NotificationCompat.Builder(this, "NOTIFICATION_CHANNEL_ID")
+                .setOngoing(true)
+                .setSmallIcon(R.drawable.ic_timer)
+                .setPriority(NotificationManager.IMPORTANCE_MIN)
+                .setCategory(Notification.CATEGORY_SERVICE)
+        }
+
+    private val pausePendingIntent: PendingIntent by lazy {
+        PendingIntent.getBroadcast(
+            this, NOTIFICATION_ID,
+            Intent(ACTION_PAUSE), PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
+    private val cancelPendingIntent: PendingIntent by lazy {
+        PendingIntent.getBroadcast(
+            this, NOTIFICATION_ID,
+            Intent(ACTION_CANCEL), PendingIntent.FLAG_IMMUTABLE
+        )
+    }
 
     private val buttonClickReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            if (intent.action == ACTION_START) {
+            if (intent.action == ACTION_PAUSE) {
                 TODO()
             }
         }
     }
 
     override fun onCreate() {
-        startAsForeground()
-
-        notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        startForeground(NOTIFICATION_ID, baseNotificationBuilder.build())
 
         ContextCompat.registerReceiver(
             applicationContext,
             buttonClickReceiver,
-            IntentFilter(ACTION_START),
+            IntentFilter(ACTION_PAUSE),
             ContextCompat.RECEIVER_NOT_EXPORTED
         )
 
@@ -62,6 +93,7 @@ class TimerService : Service(), TimerListener {
 
     override fun onDestroy() {
         unregisterReceiver(buttonClickReceiver)
+        timer.reset()
         super.onDestroy()
     }
 
@@ -76,42 +108,19 @@ class TimerService : Service(), TimerListener {
     }
 
     override fun onTick(leftTimeMillis: Long) {
-        notificationBuilder.setContentTitle("Time left: $leftTimeMillis ms")
-        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+        val notification = baseNotificationBuilder
+            .addAction(0, "Cancel", cancelPendingIntent)
+            .addAction(0, "Pause", pausePendingIntent)
+            .setContentTitle("Time left: $leftTimeMillis ms")
+            .build()
+
+        notificationManager.notify(NOTIFICATION_ID, notification)
     }
 
     override fun onTimeOver() {
-        notificationBuilder.setContentTitle("Time is over!")
-        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
-    }
-
-    private fun startAsForeground() {
-        val startIntent = Intent(ACTION_START)
-        startIntent.action = ACTION_START
-        val startPendingIntent = PendingIntent.getBroadcast(
-            this, NOTIFICATION_ID,
-            startIntent, PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val notificationChannel = NotificationChannel(
-            "NOTIFICATION_CHANNEL_ID",
-            "NOTIFICATION_CHANNEL_NAME",
-            NotificationManager.IMPORTANCE_MIN
-        )
-
-        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(notificationChannel)
-
-        notificationBuilder =
-            NotificationCompat.Builder(this, "NOTIFICATION_CHANNEL_ID")
-                .setOngoing(true)
-                .setContentTitle("0")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setPriority(NotificationManager.IMPORTANCE_MIN)
-                .setCategory(Notification.CATEGORY_SERVICE)
-                .addAction(R.drawable.ic_launcher_foreground, "Start", startPendingIntent)
-
-        startForeground(NOTIFICATION_ID, notificationBuilder.build())
+        baseNotificationBuilder.setContentTitle("Time is over!")
+        notificationManager.notify(NOTIFICATION_ID, baseNotificationBuilder.build())
+        stopSelf()
     }
 
     override fun onBind(intent: Intent?): IBinder? {

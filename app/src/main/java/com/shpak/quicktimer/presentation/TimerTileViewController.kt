@@ -13,7 +13,7 @@ class TimerTileViewController : TileService() {
 
     private val configurationChangeReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            TODO("Redraw dialog, if theme changes")
+            // TODO: Redraw dialog, if theme changes
         }
     }
 

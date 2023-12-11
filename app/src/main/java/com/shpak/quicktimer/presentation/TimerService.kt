@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import com.shpak.quicktimer.R
 import com.shpak.quicktimer.timer.CountdownTimer
 import com.shpak.quicktimer.timer.TimerListener
+import com.shpak.quicktimer.util.toHhMmSs
 
 class TimerService : Service(), TimerListener {
     companion object {
@@ -134,7 +135,7 @@ class TimerService : Service(), TimerListener {
         val notification = baseNotificationBuilder
             .addAction(0, "Cancel", cancelPendingIntent)
             .addAction(0, "Pause", pausePendingIntent)
-            .setContentTitle("Time left: $leftTimeMillis ms")
+            .setContentTitle(leftTimeMillis.toHhMmSs())
             .build()
 
         notificationManager.notify(NOTIFICATION_ID, notification)
@@ -144,7 +145,7 @@ class TimerService : Service(), TimerListener {
         val notification = baseNotificationBuilder
             .addAction(0, "Cancel", cancelPendingIntent)
             .addAction(0, "Resume", resumePendingIntent)
-            .setContentTitle("Time left: ${timer.millisLeft} ms")
+            .setContentTitle(timer.millisLeft.toHhMmSs())
             .build()
 
         notificationManager.notify(NOTIFICATION_ID, notification)

@@ -1,6 +1,5 @@
 package com.shpak.quicktimer.timer
 
-import android.util.Log
 import java.util.Timer
 import java.util.TimerTask
 
@@ -41,7 +40,6 @@ class CountdownTimer(
     }
 
     fun resume() {
-        Log.d("TAG123", "Resume: $millisLeft")
         setAndStart(millisLeft)
     }
 

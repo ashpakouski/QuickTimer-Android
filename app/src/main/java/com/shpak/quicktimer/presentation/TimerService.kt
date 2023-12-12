@@ -133,8 +133,8 @@ class TimerService : Service(), TimerListener {
 
     override fun onTick(leftTimeMillis: Long) {
         val notification = baseNotificationBuilder
-            .addAction(0, "Cancel", cancelPendingIntent)
-            .addAction(0, "Pause", pausePendingIntent)
+            .addAction(0, getString(R.string.button_cancel), cancelPendingIntent)
+            .addAction(0, getString(R.string.button_pause), pausePendingIntent)
             .setContentTitle(leftTimeMillis.toHhMmSs())
             .build()
 
@@ -143,8 +143,8 @@ class TimerService : Service(), TimerListener {
 
     fun onTimerPause() {
         val notification = baseNotificationBuilder
-            .addAction(0, "Cancel", cancelPendingIntent)
-            .addAction(0, "Resume", resumePendingIntent)
+            .addAction(0, getString(R.string.button_cancel), cancelPendingIntent)
+            .addAction(0, getString(R.string.button_resume), resumePendingIntent)
             .setContentTitle(timer.millisLeft.toHhMmSs())
             .build()
 
@@ -152,8 +152,11 @@ class TimerService : Service(), TimerListener {
     }
 
     override fun onTimeOver() {
-        baseNotificationBuilder.setContentTitle("Time is over!")
-        notificationManager.notify(NOTIFICATION_ID, baseNotificationBuilder.build())
+        val notification = baseNotificationBuilder
+            .setContentTitle((0L).toHhMmSs())
+            .build()
+
+        notificationManager.notify(NOTIFICATION_ID, notification)
         stopSelf()
     }
 

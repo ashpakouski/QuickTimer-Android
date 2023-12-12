@@ -24,8 +24,9 @@ class CountdownTimer(
         timer = Timer()
         timer?.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
-                timerListener.onTick(millisLeft)
                 millisLeft -= MILLIS_IN_SECOND
+
+                timerListener.onTick(millisLeft)
 
                 if (millisLeft == 0L) {
                     timer?.cancel()

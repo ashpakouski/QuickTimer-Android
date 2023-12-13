@@ -10,12 +10,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.shpak.quicktimer.R
 import com.shpak.quicktimer.timer.CountdownTimer
 import com.shpak.quicktimer.timer.TimerListener
 import com.shpak.quicktimer.util.toHhMmSs
+import java.lang.IllegalArgumentException
 
 class TimerService : Service(), TimerListener {
     companion object {
@@ -33,7 +35,7 @@ class TimerService : Service(), TimerListener {
         }
     }
 
-    private val timer: CountdownTimer = CountdownTimer(this)
+    private val timer = CountdownTimer(this)
 
     // Can't be "just" val, because context is null during the object initialization
     private val notificationManager: NotificationManager by lazy {
@@ -98,35 +100,20 @@ class TimerService : Service(), TimerListener {
 
     override fun onCreate() {
         createNotificationChannel()
-
         startForeground(NOTIFICATION_ID, baseNotificationBuilder.build())
-
-        ContextCompat.registerReceiver(
-            applicationContext,
-            buttonClickReceiver,
-            IntentFilter().apply {
-                addAction(ACTION_PAUSE)
-                addAction(ACTION_RESUME)
-                addAction(ACTION_CANCEL)
-            },
-            ContextCompat.RECEIVER_NOT_EXPORTED
-        )
-
+        registerButtonClickReceiver()
         super.onCreate()
     }
 
     override fun onDestroy() {
-        unregisterReceiver(buttonClickReceiver)
+        unregisterButtonClickReceiver()
         timer.cancel()
         super.onDestroy()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         timer.cancel()
-
-        val timeMillis = intent?.getLongExtra(TIME_MILLIS_KEY, 0L) ?: 0
-
-        timer.setAndStart(timeMillis = timeMillis)
+        timer.setAndStart(timeMillis = intent?.getLongExtra(TIME_MILLIS_KEY, 0L) ?: 0)
 
         return START_STICKY
     }
@@ -162,5 +149,28 @@ class TimerService : Service(), TimerListener {
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
+    }
+
+    private fun registerButtonClickReceiver() {
+        ContextCompat.registerReceiver(
+            applicationContext,
+            buttonClickReceiver,
+            IntentFilter().apply {
+                addAction(ACTION_PAUSE)
+                addAction(ACTION_RESUME)
+                addAction(ACTION_CANCEL)
+            },
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+    }
+
+    private fun unregisterButtonClickReceiver() {
+        // FIXME: For some reasons, "unregisterReceiver" throws
+        //  .IllegalArgumentException: Receiver not registered
+        try {
+            unregisterReceiver(buttonClickReceiver)
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace()
+        }
     }
 }

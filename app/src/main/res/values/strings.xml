@@ -9,4 +9,6 @@
     <string name="notification_permission_request_option_grant">Grant in settings</string>
     <string name="notification_permission_request_option_deny">Deny</string>
     <string name="tile_label">Timer</string>
+    <string name="notification_channel_name">Quick Timer Notifications</string>
+    <string name="notification_channel_id">QUICK_TIMER_NOTIFICATION_CHANNEL</string>
 </resources>

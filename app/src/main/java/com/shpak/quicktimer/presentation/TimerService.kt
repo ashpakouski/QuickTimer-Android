@@ -10,14 +10,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.shpak.quicktimer.R
 import com.shpak.quicktimer.timer.CountdownTimer
 import com.shpak.quicktimer.timer.TimerListener
 import com.shpak.quicktimer.util.toHhMmSs
-import java.lang.IllegalArgumentException
 
 class TimerService : Service(), TimerListener {
     companion object {
@@ -44,7 +42,8 @@ class TimerService : Service(), TimerListener {
 
     private val baseNotificationBuilder: NotificationCompat.Builder
         get() {
-            return NotificationCompat.Builder(applicationContext, "NOTIFICATION_CHANNEL_ID")
+            return NotificationCompat
+                .Builder(applicationContext, getString(R.string.notification_channel_id))
                 .setOngoing(true)
                 .setSmallIcon(R.drawable.ic_timer)
                 .setPriority(NotificationManager.IMPORTANCE_MIN)
@@ -79,6 +78,7 @@ class TimerService : Service(), TimerListener {
                     timer.pause()
                     onTimerPause()
                 }
+
                 ACTION_RESUME -> timer.resume()
                 ACTION_CANCEL -> {
                     timer.cancel()
@@ -90,8 +90,8 @@ class TimerService : Service(), TimerListener {
 
     private fun createNotificationChannel() {
         NotificationChannel(
-            "NOTIFICATION_CHANNEL_ID",
-            "NOTIFICATION_CHANNEL_NAME",
+            getString(R.string.notification_channel_id),
+            getString(R.string.notification_channel_name),
             NotificationManager.IMPORTANCE_MIN
         ).apply {
             notificationManager.createNotificationChannel(this)

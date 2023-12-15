@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import com.shpak.quicktimer.R
 import com.shpak.quicktimer.timer.CountdownTimer
 import com.shpak.quicktimer.timer.TimerListener
+import com.shpak.quicktimer.util.playSound
 import com.shpak.quicktimer.util.toHhMmSs
 
 class TimerService : Service(), TimerListener {
@@ -144,7 +145,10 @@ class TimerService : Service(), TimerListener {
             .build()
 
         notificationManager.notify(NOTIFICATION_ID, notification)
-        stopSelf()
+
+        playSound(applicationContext, R.raw.double_ping) {
+            stopSelf()
+        }
     }
 
     override fun onBind(intent: Intent?): IBinder? {

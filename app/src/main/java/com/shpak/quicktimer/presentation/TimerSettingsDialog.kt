@@ -7,6 +7,7 @@ import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.widget.NumberPicker
 import com.shpak.quicktimer.R
+import com.shpak.quicktimer.databinding.TimerSettingsLayoutBinding
 
 object TimerSettingsDialog {
     fun build(
@@ -16,13 +17,9 @@ object TimerSettingsDialog {
     ): Dialog {
         val layoutInflater =
             context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val dialogView = layoutInflater.inflate(R.layout.timer_settings_layout, null)
+        val binding = TimerSettingsLayoutBinding.inflate(layoutInflater, null, false)
 
-        val hoursPicker = dialogView.findViewById<NumberPicker>(R.id.hours_picker)
-        val minutesPicker = dialogView.findViewById<NumberPicker>(R.id.mins_picker)
-        val secondsPicker = dialogView.findViewById<NumberPicker>(R.id.seconds_picker)
-
-        setupPickers(hoursPicker, minutesPicker, secondsPicker)
+        setupPickers(binding.hoursPicker, binding.minsPicker, binding.secondsPicker)
 
         val builder = AlertDialog.Builder(
             ContextThemeWrapper(
@@ -32,9 +29,11 @@ object TimerSettingsDialog {
         )
 
         builder.setTitle(context.getString(R.string.select_time_title))
-            .setView(dialogView)
+            .setView(binding.root)
             .setPositiveButton(context.getString(R.string.button_start)) { dialog, _ ->
-                onTimerSet?.invoke(collectTime(hoursPicker, minutesPicker, secondsPicker))
+                onTimerSet?.invoke(
+                    collectTime(binding.hoursPicker, binding.minsPicker, binding.secondsPicker)
+                )
                 dialog.dismiss()
             }
             .setNegativeButton(context.getString(R.string.button_cancel)) { dialog, _ ->

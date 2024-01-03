@@ -1,15 +1,16 @@
 package com.shpak.quicktimer.presentation
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.view.ContextThemeWrapper
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
+import android.view.Window
 import android.widget.NumberPicker
-import com.shpak.quicktimer.R
-import com.shpak.quicktimer.databinding.TimerSettingsLayoutBinding
+import com.shpak.quicktimer.databinding.TimerSettingsDialogBinding
 
 object TimerSettingsDialog {
+
     fun build(
         context: Context,
         onTimerSet: ((timeMillis: Long) -> Unit)? = null,
@@ -17,31 +18,31 @@ object TimerSettingsDialog {
     ): Dialog {
         val layoutInflater =
             context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val binding = TimerSettingsLayoutBinding.inflate(layoutInflater, null, false)
+        val binding = TimerSettingsDialogBinding.inflate(layoutInflater, null, false)
 
-        setupPickers(binding.hoursPicker, binding.minsPicker, binding.secondsPicker)
+        val dialog = Dialog(context)
 
-        val builder = AlertDialog.Builder(
-            ContextThemeWrapper(
-                context,
-                R.style.QuickTimerAppDialog
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.setContentView(binding.root)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setOnShowListener {
+            setupPickers(binding.hoursPicker, binding.minsPicker, binding.secondsPicker)
+        }
+
+        binding.buttonPositive.setOnClickListener {
+            onTimerSet?.invoke(
+                collectTime(binding.hoursPicker, binding.minsPicker, binding.secondsPicker)
             )
-        )
+            dialog.dismiss()
+        }
 
-        builder.setTitle(context.getString(R.string.select_time_title))
-            .setView(binding.root)
-            .setPositiveButton(context.getString(R.string.button_start)) { dialog, _ ->
-                onTimerSet?.invoke(
-                    collectTime(binding.hoursPicker, binding.minsPicker, binding.secondsPicker)
-                )
-                dialog.dismiss()
-            }
-            .setNegativeButton(context.getString(R.string.button_cancel)) { dialog, _ ->
-                onCancel?.invoke()
-                dialog.dismiss()
-            }
+        binding.buttonNegative.setOnClickListener {
+            onCancel?.invoke()
+            dialog.dismiss()
+        }
 
-        return builder.create()
+        return dialog
     }
 
     private fun setupPickers(

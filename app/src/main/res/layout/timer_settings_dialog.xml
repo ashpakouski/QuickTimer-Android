@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
     android:background="@drawable/bg_material_dialog_rounded_corners"
     android:padding="24dp">
 
@@ -13,8 +12,8 @@
         android:layout_height="32dp"
         android:fontFamily="@font/roboto_regular"
         android:text="@string/app_name"
-        android:textColor="#E6E0E9"
-        android:textSize="24sp"
+        android:textColor="@color/dialog_text"
+        android:textSize="22sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,11 +21,24 @@
         android:id="@+id/constraintLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title">
+
+        <TextView
+            android:id="@+id/label_hours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_regular"
+            android:text="H"
+            android:textColor="@color/dialog_text"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/hours_picker"
+            app:layout_constraintStart_toStartOf="@+id/hours_picker"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <NumberPicker
             android:id="@+id/hours_picker"
@@ -35,7 +47,7 @@
             android:theme="@style/NumberPickerStyle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/label_hours" />
 
         <TextView
             android:id="@+id/hours_mins_dots_separator"
@@ -48,6 +60,18 @@
             app:layout_constraintStart_toEndOf="@+id/hours_picker"
             app:layout_constraintTop_toTopOf="@+id/hours_picker" />
 
+        <TextView
+            android:id="@+id/label_minutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_regular"
+            android:text="M"
+            android:textColor="@color/dialog_text"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/mins_picker"
+            app:layout_constraintStart_toStartOf="@+id/mins_picker"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <NumberPicker
             android:id="@+id/mins_picker"
             android:layout_width="wrap_content"
@@ -55,7 +79,7 @@
             android:theme="@style/NumberPickerStyle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/hours_mins_dots_separator"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/label_minutes" />
 
         <TextView
             android:id="@+id/mins_seconds_dots_separator"
@@ -68,6 +92,18 @@
             app:layout_constraintStart_toEndOf="@+id/mins_picker"
             app:layout_constraintTop_toTopOf="@+id/mins_picker" />
 
+        <TextView
+            android:id="@+id/label_seconds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_regular"
+            android:text="S"
+            android:textColor="@color/dialog_text"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/seconds_picker"
+            app:layout_constraintStart_toStartOf="@+id/seconds_picker"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <NumberPicker
             android:id="@+id/seconds_picker"
             android:layout_width="wrap_content"
@@ -76,8 +112,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/mins_seconds_dots_separator"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintTop_toBottomOf="@id/label_seconds" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
@@ -88,7 +123,7 @@
         android:paddingHorizontal="12dp"
         android:paddingVertical="10dp"
         android:text="Cancel"
-        android:textColor="#FFD0BCFF"
+        android:textColor="@color/dialog_button"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_positive" />
@@ -101,7 +136,7 @@
         android:paddingHorizontal="12dp"
         android:paddingVertical="10dp"
         android:text="Done"
-        android:textColor="#FFD0BCFF"
+        android:textColor="@color/dialog_button"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

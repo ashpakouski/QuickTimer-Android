@@ -16,5 +16,5 @@
 
     <style name="QuickTimerAppDialog" parent="Theme.Material3.Light.Dialog" />
 
-    <style name="NumberPickerStyle" parent="Theme.MaterialComponents.Light" />
+    <style name="NumberPickerStyle" parent="Theme.AppCompat.Light.NoActionBar" />
 </resources>

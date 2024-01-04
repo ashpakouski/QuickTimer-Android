@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="dialog_button">#FFD0BCFF</color>
+    <color name="dialog_text">#FFE6E0E9</color>
+</resources>

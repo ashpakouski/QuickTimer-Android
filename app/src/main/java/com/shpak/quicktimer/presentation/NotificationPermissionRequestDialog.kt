@@ -1,10 +1,12 @@
 package com.shpak.quicktimer.presentation
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.view.ContextThemeWrapper
-import com.shpak.quicktimer.R
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.view.LayoutInflater
+import android.view.Window
+import com.shpak.quicktimer.databinding.NotificationsPermissionRequestDialogBinding
 
 object NotificationPermissionRequestDialog {
     fun build(
@@ -12,28 +14,28 @@ object NotificationPermissionRequestDialog {
         onRequestGranted: (() -> Unit)? = null,
         onRequestDenied: (() -> Unit)? = null
     ): Dialog {
-        val dialogBuilder = AlertDialog.Builder(
-            ContextThemeWrapper(
-                context,
-                R.style.QuickTimerAppDialog
-            )
-        )
-            .setIcon(R.drawable.ic_launcher_foreground)
-            .setMessage(
-                context.getString(
-                    R.string.notifications_permission_request_message,
-                    context.getString(R.string.app_name)
-                )
-            )
-            .setPositiveButton(context.getText(R.string.notification_permission_request_option_grant)) { dialog, _ ->
-                dialog.dismiss()
-                onRequestGranted?.invoke()
-            }
-            .setNegativeButton(R.string.notification_permission_request_option_deny) { dialog, _ ->
-                dialog.dismiss()
-                onRequestDenied?.invoke()
-            }
+        val layoutInflater =
+            context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val binding =
+            NotificationsPermissionRequestDialogBinding.inflate(layoutInflater, null, false)
 
-        return dialogBuilder.create()
+        val dialog = Dialog(context)
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.setContentView(binding.root)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        binding.buttonPositive.setOnClickListener {
+            dialog.dismiss()
+            onRequestGranted?.invoke()
+        }
+
+        binding.buttonNegative.setOnClickListener {
+            dialog.dismiss()
+            onRequestDenied?.invoke()
+        }
+
+        return dialog
     }
 }

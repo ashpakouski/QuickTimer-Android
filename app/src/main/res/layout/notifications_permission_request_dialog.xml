@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_material_dialog"
+    android:padding="24dp">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/notifications_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        android:src="@drawable/ic_notifications"
+        android:tint="@color/dialog_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/permission_request_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/roboto_regular"
+        android:text="Permission required"
+        android:textColor="@color/dialog_text"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notifications_icon" />
+
+    <TextView
+        android:id="@+id/permission_request_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/roboto_regular"
+        android:text="To ensure proper functionality, grant permission for notifications on your device for this app"
+        android:textColor="@color/dialog_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/permission_request_title" />
+
+    <Button
+        android:id="@+id/button_negative"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:background="@drawable/bg_permission_button_top"
+        android:fontFamily="@font/roboto_medium"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:text="Deny"
+        android:textColor="@color/dialog_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/permission_request_message" />
+
+    <Button
+        android:id="@+id/button_positive"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_permission_button_bottom"
+        android:fontFamily="@font/roboto_medium"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:text="Allow in settings"
+        android:textColor="@color/dialog_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_negative" />
+</androidx.constraintlayout.widget.ConstraintLayout>

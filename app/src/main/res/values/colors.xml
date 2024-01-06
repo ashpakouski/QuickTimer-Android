@@ -10,4 +10,6 @@
 
     <color name="dialog_button">#FF6750A4</color>
     <color name="dialog_text">#FF1D1B20</color>
+    <color name="dialog_color">#FFECE6F0</color>
+    <color name="permission_request_button">#FF6750A4</color>
 </resources>

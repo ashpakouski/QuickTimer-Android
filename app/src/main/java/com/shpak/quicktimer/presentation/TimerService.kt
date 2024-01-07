@@ -75,16 +75,9 @@ class TimerService : Service(), TimerListener {
     private val buttonClickReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.action) {
-                ACTION_PAUSE -> {
-                    timer.pause()
-                    onTimerPause()
-                }
-
+                ACTION_PAUSE -> timer.pause()
                 ACTION_RESUME -> timer.resume()
-                ACTION_CANCEL -> {
-                    timer.cancel()
-                    stopSelf()
-                }
+                ACTION_CANCEL -> timer.cancel()
             }
         }
     }
@@ -113,7 +106,6 @@ class TimerService : Service(), TimerListener {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        timer.cancel()
         timer.setAndStart(timeMillis = intent?.getLongExtra(TIME_MILLIS_KEY, 0L) ?: 0)
 
         return START_STICKY
@@ -129,14 +121,18 @@ class TimerService : Service(), TimerListener {
         notificationManager.notify(NOTIFICATION_ID, notification)
     }
 
-    fun onTimerPause() {
+    override fun onTimerPause(leftTimeMillis: Long) {
         val notification = baseNotificationBuilder
             .addAction(0, getString(R.string.button_cancel), cancelPendingIntent)
             .addAction(0, getString(R.string.button_resume), resumePendingIntent)
-            .setContentTitle(timer.millisLeft.toHhMmSs())
+            .setContentTitle(leftTimeMillis.toHhMmSs())
             .build()
 
         notificationManager.notify(NOTIFICATION_ID, notification)
+    }
+
+    override fun onTimerCancel() {
+        stopSelf()
     }
 
     override fun onTimeOver() {

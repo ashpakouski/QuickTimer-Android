@@ -10,10 +10,12 @@ class CountdownTimer(
         private const val MILLIS_IN_SECOND = 1000L
     }
 
-    var millisLeft = 0L
+    private var millisLeft = 0L
     private var timer: Timer? = null
 
     fun setAndStart(timeMillis: Long) {
+        if (timer != null) return
+
         if (timeMillis <= 0L) {
             timerListener.onTimeOver()
             return
@@ -29,7 +31,7 @@ class CountdownTimer(
                 timerListener.onTick(millisLeft)
 
                 if (millisLeft == 0L) {
-                    timer?.cancel()
+                    cancelAndClear()
                     timerListener.onTimeOver()
                 }
             }
@@ -37,7 +39,8 @@ class CountdownTimer(
     }
 
     fun pause() {
-        timer?.cancel()
+        cancelAndClear()
+        timerListener.onTimerPause(millisLeft)
     }
 
     fun resume() {
@@ -45,6 +48,12 @@ class CountdownTimer(
     }
 
     fun cancel() {
+        cancelAndClear()
+        timerListener.onTimerCancel()
+    }
+
+    private fun cancelAndClear() {
         timer?.cancel()
+        timer = null
     }
 }

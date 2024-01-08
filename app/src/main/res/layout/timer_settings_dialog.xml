@@ -50,7 +50,7 @@
             app:layout_constraintTop_toBottomOf="@id/label_hours" />
 
         <TextView
-            android:id="@+id/hours_mins_dots_separator"
+            android:id="@+id/hours_minutes_dots_separator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
@@ -68,29 +68,29 @@
             android:text="M"
             android:textColor="@color/dialog_text"
             android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="@+id/mins_picker"
-            app:layout_constraintStart_toStartOf="@+id/mins_picker"
+            app:layout_constraintEnd_toEndOf="@+id/minutes_picker"
+            app:layout_constraintStart_toStartOf="@+id/minutes_picker"
             app:layout_constraintTop_toTopOf="parent" />
 
         <NumberPicker
-            android:id="@+id/mins_picker"
+            android:id="@+id/minutes_picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:theme="@style/NumberPickerStyle"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/hours_mins_dots_separator"
+            app:layout_constraintStart_toEndOf="@+id/hours_minutes_dots_separator"
             app:layout_constraintTop_toBottomOf="@id/label_minutes" />
 
         <TextView
-            android:id="@+id/mins_seconds_dots_separator"
+            android:id="@+id/minutes_seconds_dots_separator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text=":"
             android:theme="@style/NumberPickerStyle"
-            app:layout_constraintBottom_toBottomOf="@+id/mins_picker"
-            app:layout_constraintStart_toEndOf="@+id/mins_picker"
-            app:layout_constraintTop_toTopOf="@+id/mins_picker" />
+            app:layout_constraintBottom_toBottomOf="@+id/minutes_picker"
+            app:layout_constraintStart_toEndOf="@+id/minutes_picker"
+            app:layout_constraintTop_toTopOf="@+id/minutes_picker" />
 
         <TextView
             android:id="@+id/label_seconds"
@@ -111,7 +111,7 @@
             android:theme="@style/NumberPickerStyle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/mins_seconds_dots_separator"
+            app:layout_constraintStart_toEndOf="@+id/minutes_seconds_dots_separator"
             app:layout_constraintTop_toBottomOf="@id/label_seconds" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -134,11 +134,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
+        android:enabled="false"
         android:fontFamily="@font/roboto_medium"
         android:paddingHorizontal="12dp"
         android:paddingVertical="10dp"
         android:text="Done"
-        android:textColor="@color/dialog_button"
+        android:textColor="@drawable/color_dialog_button"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

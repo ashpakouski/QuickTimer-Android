@@ -2,10 +2,7 @@ package com.shpak.quicktimer.presentation
 
 import android.app.Dialog
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
-import android.view.Window
 import com.shpak.quicktimer.databinding.NotificationsPermissionRequestDialogBinding
 
 object NotificationPermissionRequestDialog {
@@ -14,17 +11,10 @@ object NotificationPermissionRequestDialog {
         onRequestGranted: (() -> Unit)? = null,
         onRequestDenied: (() -> Unit)? = null
     ): Dialog {
-        val layoutInflater =
-            context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val binding =
-            NotificationsPermissionRequestDialogBinding.inflate(layoutInflater, null, false)
-
-        val dialog = Dialog(context)
-
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(true)
-        dialog.setContentView(binding.root)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val binding = NotificationsPermissionRequestDialogBinding.inflate(
+            LayoutInflater.from(context), null, false
+        )
+        val dialog = CustomDialog(binding.root)
 
         binding.buttonPositive.setOnClickListener {
             dialog.dismiss()

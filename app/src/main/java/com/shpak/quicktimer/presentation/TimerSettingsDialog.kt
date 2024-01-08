@@ -2,10 +2,7 @@ package com.shpak.quicktimer.presentation
 
 import android.app.Dialog
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
-import android.view.Window
 import android.widget.NumberPicker
 import com.shpak.quicktimer.databinding.TimerSettingsDialogBinding
 
@@ -16,16 +13,9 @@ object TimerSettingsDialog {
         onTimerSet: ((timeMillis: Long) -> Unit)? = null,
         onCancel: (() -> Unit)? = null
     ): Dialog {
-        val layoutInflater =
-            context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val binding = TimerSettingsDialogBinding.inflate(layoutInflater, null, false)
+        val binding = TimerSettingsDialogBinding.inflate(LayoutInflater.from(context), null, false)
+        val dialog = CustomDialog(binding.root)
 
-        val dialog = Dialog(context)
-
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(true)
-        dialog.setContentView(binding.root)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.setOnShowListener {
             setupPickers(binding.hoursPicker, binding.minsPicker, binding.secondsPicker)
         }

@@ -17,12 +17,14 @@ object TimerSettingsDialog {
         val dialog = CustomDialog(binding.root)
 
         dialog.setOnShowListener {
-            setupPickers(binding.hoursPicker, binding.minsPicker, binding.secondsPicker)
+            setupPickers(binding) { _, _, _ ->
+                binding.buttonPositive.isEnabled = collectTime(binding) != 0L
+            }
         }
 
         binding.buttonPositive.setOnClickListener {
             onTimerSet?.invoke(
-                collectTime(binding.hoursPicker, binding.minsPicker, binding.secondsPicker)
+                collectTime(binding)
             )
             dialog.dismiss()
         }
@@ -36,37 +38,35 @@ object TimerSettingsDialog {
     }
 
     private fun setupPickers(
-        hoursPicker: NumberPicker,
-        minutesPicker: NumberPicker,
-        secondsPicker: NumberPicker
+        binding: TimerSettingsDialogBinding,
+        onValueChangedListener: NumberPicker.OnValueChangeListener
     ) {
-        hoursPicker.apply {
+        binding.hoursPicker.apply {
             maxValue = 11
             minValue = 0
             value = 0
+            setOnValueChangedListener(onValueChangedListener)
         }
 
-        minutesPicker.apply {
+        binding.minutesPicker.apply {
             maxValue = 59
             minValue = 0
             value = 0
+            setOnValueChangedListener(onValueChangedListener)
         }
 
-        secondsPicker.apply {
+        binding.secondsPicker.apply {
             maxValue = 59
             minValue = 0
             value = 0
+            setOnValueChangedListener(onValueChangedListener)
         }
     }
 
-    private fun collectTime(
-        hoursPicker: NumberPicker,
-        minutesPicker: NumberPicker,
-        secondsPicker: NumberPicker
-    ): Long {
-        val hours = hoursPicker.value
-        val minutes = minutesPicker.value
-        val seconds = secondsPicker.value
+    private fun collectTime(binding: TimerSettingsDialogBinding): Long {
+        val hours = binding.hoursPicker.value
+        val minutes = binding.minutesPicker.value
+        val seconds = binding.secondsPicker.value
 
         return (hours * 60 * 60 + minutes * 60 + seconds) * 1000L
     }

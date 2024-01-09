@@ -1,14 +1,25 @@
 <resources>
+    <!--  Application  -->
     <string name="app_name">Quick Timer</string>
-    <string name="select_time_title">Select time</string>
-    <string name="button_start">Start</string>
-    <string name="button_cancel">Cancel</string>
-    <string name="button_pause">Pause</string>
-    <string name="button_resume">Resume</string>
-    <string name="notifications_permission_request_message">Allow %s to display notification?</string>
-    <string name="notification_permission_request_option_grant">Grant in settings</string>
-    <string name="notification_permission_request_option_deny">Deny</string>
     <string name="tile_label">Timer</string>
+
+    <!--  Permission request dialog  -->
+    <string name="permission_request_header">Permission required</string>
+    <string name="permission_request_message">To ensure proper functionality, grant permission for notifications on your device for this app</string>
+    <string name="permission_request_button_allow">Allow in settings</string>
+    <string name="permission_request_button_deny">Deny</string>
+
+    <!--  Timer settings dialog  -->
+    <string name="timer_settings_label_seconds">S</string>
+    <string name="timer_settings_label_minutes">M</string>
+    <string name="timer_settings_label_hours">H</string>
+    <string name="timer_settings_button_cancel">Cancel</string>
+    <string name="timer_settings_button_start">Start</string>
+
+    <!--  Notifications  -->
     <string name="notification_channel_name">Quick Timer Notifications</string>
     <string name="notification_channel_id">QUICK_TIMER_NOTIFICATION_CHANNEL</string>
+    <string name="notification_button_cancel">Cancel</string>
+    <string name="notification_button_pause">Pause</string>
+    <string name="notification_button_resume">Resume</string>
 </resources>

@@ -54,21 +54,21 @@ class TimerService : Service(), TimerListener {
     private val pausePendingIntent: PendingIntent by lazy {
         PendingIntent.getBroadcast(
             applicationContext, NOTIFICATION_ID,
-            Intent(ACTION_PAUSE), PendingIntent.FLAG_IMMUTABLE
+            Intent(ACTION_PAUSE).appendPackageName(), PendingIntent.FLAG_IMMUTABLE
         )
     }
 
     private val cancelPendingIntent: PendingIntent by lazy {
         PendingIntent.getBroadcast(
             applicationContext, NOTIFICATION_ID,
-            Intent(ACTION_CANCEL), PendingIntent.FLAG_IMMUTABLE
+            Intent(ACTION_CANCEL).appendPackageName(), PendingIntent.FLAG_IMMUTABLE
         )
     }
 
     private val resumePendingIntent: PendingIntent by lazy {
         PendingIntent.getBroadcast(
             applicationContext, NOTIFICATION_ID,
-            Intent(ACTION_RESUME), PendingIntent.FLAG_IMMUTABLE
+            Intent(ACTION_RESUME).appendPackageName(), PendingIntent.FLAG_IMMUTABLE
         )
     }
 
@@ -172,5 +172,10 @@ class TimerService : Service(), TimerListener {
         } catch (e: IllegalArgumentException) {
             e.printStackTrace()
         }
+    }
+
+    private fun Intent.appendPackageName(): Intent {
+        this.`package` = applicationContext.packageName
+        return this
     }
 }

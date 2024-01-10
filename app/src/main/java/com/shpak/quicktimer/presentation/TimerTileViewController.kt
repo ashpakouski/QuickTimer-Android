@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import com.shpak.quicktimer.util.areNotificationsEnabled
 import com.shpak.quicktimer.util.redirectToAppSettings
@@ -24,6 +25,12 @@ class TimerTileViewController : TileService() {
             configurationChangeReceiver,
             IntentFilter(Intent.ACTION_CONFIGURATION_CHANGED)
         )
+    }
+
+    override fun onStartListening() {
+        super.onStartListening()
+        qsTile.state = Tile.STATE_INACTIVE
+        qsTile.updateTile()
     }
 
     override fun onClick() {

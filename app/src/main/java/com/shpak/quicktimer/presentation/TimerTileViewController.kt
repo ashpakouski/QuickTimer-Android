@@ -1,5 +1,6 @@
 package com.shpak.quicktimer.presentation
 
+import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -17,6 +18,9 @@ class TimerTileViewController : TileService() {
             // TODO: Redraw dialog, if theme changes
         }
     }
+
+    private var permissionRequestDialog: Dialog? = null
+    private var timerSettingsDialog: Dialog? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -44,18 +48,22 @@ class TimerTileViewController : TileService() {
     }
 
     private fun showTimerSettingsDialog() {
-        showDialog(
-            TimerSettingsDialog.build(
-                applicationContext,
-                onTimerSet = { timeMillis ->
-                    TimerService.start(applicationContext, timeMillis)
-                }
-            )
-        )
+        if (timerSettingsDialog?.isShowing == true) return
+
+        timerSettingsDialog = TimerSettingsDialog.build(
+            applicationContext,
+            onTimerSet = { timeMillis ->
+                TimerService.start(applicationContext, timeMillis)
+            }
+        ).apply {
+            showDialog(this)
+        }
     }
 
     private fun requestNotificationsPermission() {
-        NotificationPermissionRequestDialog.build(
+        if (permissionRequestDialog?.isShowing == true) return
+
+        permissionRequestDialog = NotificationPermissionRequestDialog.build(
             applicationContext,
             onRequestGranted = {
                 redirectToAppSettings(applicationContext)

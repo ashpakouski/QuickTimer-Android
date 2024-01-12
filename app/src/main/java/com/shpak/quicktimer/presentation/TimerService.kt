@@ -10,6 +10,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.shpak.quicktimer.R
@@ -106,7 +107,17 @@ class TimerService : Service(), TimerListener {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        timer.setAndStart(timeMillis = intent?.getLongExtra(TIME_MILLIS_KEY, 0L) ?: 0)
+        val isStarted = timer.setAndStart(
+            timeMillis = intent?.getLongExtra(TIME_MILLIS_KEY, 0L) ?: 0
+        )
+
+        if (!isStarted) {
+            Toast.makeText(
+                applicationContext,
+                getText(R.string.error_timer_is_already_running),
+                Toast.LENGTH_LONG
+            ).show()
+        }
 
         return START_STICKY
     }

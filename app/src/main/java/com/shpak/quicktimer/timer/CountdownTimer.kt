@@ -13,12 +13,14 @@ class CountdownTimer(
     private var millisLeft = 0L
     private var timer: Timer? = null
 
-    fun setAndStart(timeMillis: Long) {
-        if (timer != null) return
+    // Returns true, if start succeeds and false, if it doesn't
+    // (in case if timer is already running)
+    fun setAndStart(timeMillis: Long): Boolean {
+        if (timer != null) return false
 
         if (timeMillis <= 0L) {
             timerListener.onTimeOver()
-            return
+            return true
         }
 
         millisLeft = timeMillis
@@ -36,6 +38,8 @@ class CountdownTimer(
                 }
             }
         }, 0, 1000)
+
+        return true
     }
 
     fun pause() {

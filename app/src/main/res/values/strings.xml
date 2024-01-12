@@ -22,4 +22,7 @@
     <string name="notification_button_cancel">Cancel</string>
     <string name="notification_button_pause">Pause</string>
     <string name="notification_button_resume">Resume</string>
+
+    <!--  Errors  -->
+    <string name="error_timer_is_already_running">You have to cancel the running timer before starting a new one</string>
 </resources>

@@ -13,6 +13,6 @@ width="170" hspace="5" vspace="10">](https://github.com/AndreiShpakovskiy/QuickT
 [<img src="https://github.com/AndreiShpakovskiy/QuickTimer-Android/assets/50966785/ea8d2167-c58a-4f59-ad30-e86dbfcdc0b9" align="center"
 width="170" hspace="5" vspace="10">](https://github.com/AndreiShpakovskiy/QuickTimer-Android/assets/50966785/ea8d2167-c58a-4f59-ad30-e86dbfcdc0b9)
 
-## Future features
-1. System theme change handler
-2. Feel free to suggest something else :)
+## Follow for more!
+
+[<img src="https://github.com/AndreiShpakovskiy/BmpViewer/assets/50966785/026046f6-a25d-49bf-861d-776629be14aa" height="50">](https://linkedin.com/in/andreishpakovskiy)

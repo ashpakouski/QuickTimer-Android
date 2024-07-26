@@ -7,13 +7,13 @@ import androidx.annotation.RawRes
 fun playSound(
     context: Context,
     @RawRes resourceId: Int,
-    onCompletionListener: (() -> Unit?)? = null
-) {
-    val mediaPlayer = MediaPlayer.create(context, resourceId)
-    mediaPlayer.setOnCompletionListener {
-        mediaPlayer.reset()
-        mediaPlayer.release()
-        onCompletionListener?.invoke()
+    onComplete: (() -> Unit?)? = null
+) = MediaPlayer.create(context, resourceId).run {
+    setOnCompletionListener {
+        reset()
+        release()
+        onComplete?.invoke()
     }
-    mediaPlayer.start()
+
+    start()
 }

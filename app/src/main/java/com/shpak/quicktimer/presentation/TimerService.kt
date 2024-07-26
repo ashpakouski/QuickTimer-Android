@@ -43,14 +43,12 @@ class TimerService : Service(), TimerListener {
     }
 
     private val baseNotificationBuilder: NotificationCompat.Builder
-        get() {
-            return NotificationCompat
-                .Builder(applicationContext, getString(R.string.notification_channel_id))
-                .setOngoing(true)
-                .setSmallIcon(R.drawable.ic_timer)
-                .setPriority(NotificationManager.IMPORTANCE_MIN)
-                .setCategory(Notification.CATEGORY_SERVICE)
-        }
+        get() = NotificationCompat
+            .Builder(applicationContext, getString(R.string.notification_channel_id))
+            .setOngoing(true)
+            .setSmallIcon(R.drawable.ic_timer)
+            .setPriority(NotificationManager.IMPORTANCE_MIN)
+            .setCategory(Notification.CATEGORY_SERVICE)
 
     private val pausePendingIntent: PendingIntent by lazy {
         PendingIntent.getBroadcast(
@@ -142,9 +140,7 @@ class TimerService : Service(), TimerListener {
         notificationManager.notify(NOTIFICATION_ID, notification)
     }
 
-    override fun onTimerCancel() {
-        stopSelf()
-    }
+    override fun onTimerCancel() = stopSelf()
 
     override fun onTimeOver() {
         val notification = baseNotificationBuilder
@@ -158,9 +154,7 @@ class TimerService : Service(), TimerListener {
         }
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
-    }
+    override fun onBind(intent: Intent?): IBinder? = null
 
     private fun registerButtonClickReceiver() {
         ContextCompat.registerReceiver(
@@ -185,8 +179,7 @@ class TimerService : Service(), TimerListener {
         }
     }
 
-    private fun Intent.appendPackageName(): Intent {
-        this.`package` = applicationContext.packageName
-        return this
+    private fun Intent.appendPackageName(): Intent = apply {
+        `package` = applicationContext.packageName
     }
 }

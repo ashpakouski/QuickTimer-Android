@@ -26,7 +26,7 @@ class CountdownTimer(
         millisLeft = timeMillis
 
         timer = Timer()
-        timer?.scheduleAtFixedRate(object : TimerTask() {
+        timer?.schedule(object : TimerTask() {
             override fun run() {
                 millisLeft -= MILLIS_IN_SECOND
 

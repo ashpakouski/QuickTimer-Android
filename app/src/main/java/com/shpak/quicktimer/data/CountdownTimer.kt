@@ -1,4 +1,4 @@
-package com.shpak.quicktimer.timer
+package com.shpak.quicktimer.data
 
 import java.util.Timer
 import java.util.TimerTask

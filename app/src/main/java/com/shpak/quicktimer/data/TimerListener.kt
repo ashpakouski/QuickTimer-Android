@@ -1,4 +1,4 @@
-package com.shpak.quicktimer.timer
+package com.shpak.quicktimer.data
 
 interface TimerListener {
     fun onTick(leftTimeMillis: Long)

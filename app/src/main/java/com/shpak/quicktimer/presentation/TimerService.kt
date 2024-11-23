@@ -14,8 +14,8 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.shpak.quicktimer.R
-import com.shpak.quicktimer.timer.CountdownTimer
-import com.shpak.quicktimer.timer.TimerListener
+import com.shpak.quicktimer.data.CountdownTimer
+import com.shpak.quicktimer.data.TimerListener
 import com.shpak.quicktimer.util.playSound
 import com.shpak.quicktimer.util.toHhMmSs
 

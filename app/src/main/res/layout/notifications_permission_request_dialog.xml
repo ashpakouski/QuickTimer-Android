@@ -19,39 +19,28 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/permission_request_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/roboto_regular"
-        android:text="@string/permission_request_header"
-        android:textColor="@color/on_background"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notifications_icon" />
-
-    <TextView
         android:id="@+id/permission_request_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/roboto_regular"
+        android:lineHeight="24sp"
         android:text="@string/permission_request_message"
+        android:textAlignment="center"
         android:textColor="@color/on_background"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/permission_request_title" />
+        app:layout_constraintTop_toBottomOf="@+id/notifications_icon" />
 
     <Button
         android:id="@+id/button_negative"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
-        android:background="@drawable/bg_permission_button_top"
+        android:layout_height="58dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/bg_button_rounded_corners_top"
         android:fontFamily="@font/roboto_medium"
-        android:foreground="?android:attr/selectableItemBackground"
         android:text="@string/permission_request_button_deny"
         android:textColor="@color/on_primary"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,11 +51,10 @@
         android:id="@+id/button_positive"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="58dp"
         android:layout_marginTop="4dp"
-        android:background="@drawable/bg_permission_button_bottom"
+        android:background="@drawable/bg_button_rounded_bottom"
         android:fontFamily="@font/roboto_medium"
-        android:foreground="?android:attr/selectableItemBackground"
         android:text="@string/permission_request_button_allow"
         android:textColor="@color/on_primary"
         app:layout_constraintEnd_toEndOf="parent"

@@ -4,8 +4,7 @@
     <string name="tile_label">Timer</string>
 
     <!--  Permission request dialog  -->
-    <string name="permission_request_header">Permission required</string>
-    <string name="permission_request_message">To ensure proper functionality, grant permission for notifications on your device for this app</string>
+    <string name="permission_request_message">Allow Quick Timer to display notifications to provide its essential functionality?</string>
     <string name="permission_request_button_allow">Allow in settings</string>
     <string name="permission_request_button_deny">Deny</string>
 

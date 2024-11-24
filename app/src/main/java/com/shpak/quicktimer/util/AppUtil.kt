@@ -2,15 +2,12 @@ package com.shpak.quicktimer.util
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.provider.Settings
 
-fun redirectToAppSettings(context: Context) =
-    with(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)) {
-        data = Uri.fromParts("package", context.packageName, null)
-        addCategory(Intent.CATEGORY_DEFAULT)
+fun redirectToNotificationSettings(context: Context) =
+    with(Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)) {
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+        putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
 
         context.startActivity(this)
     }

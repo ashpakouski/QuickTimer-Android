@@ -8,7 +8,7 @@ import android.content.IntentFilter
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import com.shpak.quicktimer.util.areNotificationsEnabled
-import com.shpak.quicktimer.util.redirectToAppSettings
+import com.shpak.quicktimer.util.redirectToNotificationSettings
 
 // It behaves more like a View than like a Service, so let's give this naming a try
 class TimerTileViewController : TileService() {
@@ -66,7 +66,7 @@ class TimerTileViewController : TileService() {
         permissionRequestDialog = NotificationPermissionRequestDialog.build(
             applicationContext,
             onRequestGranted = {
-                redirectToAppSettings(applicationContext)
+                redirectToNotificationSettings(applicationContext)
             }
         ).apply {
             showDialog(this)

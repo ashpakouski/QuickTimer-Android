@@ -9,9 +9,10 @@
     <string name="permission_request_button_deny">Deny</string>
 
     <!--  Timer settings dialog  -->
-    <string name="timer_settings_label_seconds">S</string>
-    <string name="timer_settings_label_minutes">M</string>
-    <string name="timer_settings_label_hours">H</string>
+    <string name="timer_settings_title">Set Timer</string>
+    <string name="timer_settings_label_seconds">Seconds</string>
+    <string name="timer_settings_label_minutes">Minutes</string>
+    <string name="timer_settings_label_hours">Hours</string>
     <string name="timer_settings_button_cancel">Cancel</string>
     <string name="timer_settings_button_start">Start</string>
 

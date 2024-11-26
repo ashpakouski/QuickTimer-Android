@@ -8,16 +8,27 @@ import android.util.Size
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
 
+private interface ScreenSizeProvider {
+    fun getScreenSize(context: Context): Size
+}
+
 object ScreenMetricsCompat {
 
-    fun getScreenSize(context: Context): Size = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-        getScreenSizeOld(context)
-    } else {
-        getScreenSizeApi30(context)
+    private val screenSizeProvider: ScreenSizeProvider = when {
+        Build.VERSION.SDK_INT < Build.VERSION_CODES.R -> ScreenSizeProviderPreApi30()
+        else -> ScreenSizeProviderApi30()
     }
 
-    private fun getScreenSizeOld(context: Context): Size {
-        val display = context.getSystemService(WindowManager::class.java).defaultDisplay
+    fun getScreenSize(context: Context): Size {
+        return screenSizeProvider.getScreenSize(context)
+    }
+}
+
+@Suppress("Deprecation")
+private class ScreenSizeProviderPreApi30 : ScreenSizeProvider {
+
+    override fun getScreenSize(context: Context): Size {
+        val display = context.getSystemService(WindowManager::class.java)?.defaultDisplay
         val metrics = if (display != null) {
             DisplayMetrics().also { display.getRealMetrics(it) }
         } else {
@@ -25,11 +36,13 @@ object ScreenMetricsCompat {
         }
         return Size(metrics.widthPixels, metrics.heightPixels)
     }
+}
 
+private class ScreenSizeProviderApi30 : ScreenSizeProvider {
 
-    @RequiresApi(30)
-    private fun getScreenSizeApi30(context: Context): Size {
-        val metrics = context.getSystemService(WindowManager::class.java).currentWindowMetrics
-        return Size(metrics.bounds.width(), metrics.bounds.height())
+    @RequiresApi(Build.VERSION_CODES.R)
+    override fun getScreenSize(context: Context): Size {
+        val metrics = context.getSystemService(WindowManager::class.java)?.currentWindowMetrics
+        return Size(metrics?.bounds?.width() ?: 0, metrics?.bounds?.height() ?: 0)
     }
 }

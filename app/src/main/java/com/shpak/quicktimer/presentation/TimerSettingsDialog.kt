@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.widget.NumberPicker
 import com.shpak.quicktimer.databinding.TimerSettingsDialogBinding
+import com.shpak.quicktimer.util.HapticsCompat
 
 object TimerSettingsDialog {
 
@@ -13,11 +14,13 @@ object TimerSettingsDialog {
         onTimerSet: ((timeMillis: Long) -> Unit)? = null,
         onCancel: (() -> Unit)? = null
     ): Dialog {
+        val haptics = HapticsCompat(context.applicationContext)
         val binding = TimerSettingsDialogBinding.inflate(LayoutInflater.from(context), null, false)
         val dialog = CustomDialog(binding.root)
 
         dialog.setOnShowListener {
             setupPickers(binding) { _, _, _ ->
+                haptics.generateSingleTick()
                 binding.buttonPositive.isEnabled = collectTime(binding) != 0L
             }
         }

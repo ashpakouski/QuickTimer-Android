@@ -2,6 +2,11 @@ package com.shpak.quicktimer.presentation
 
 import android.app.Dialog
 import android.content.Context
+import android.database.ContentObserver
+import android.media.AudioManager
+import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.widget.NumberPicker
 import com.shpak.quicktimer.databinding.TimerSettingsDialogBinding
@@ -16,6 +21,22 @@ object TimerSettingsDialog {
     ): Dialog {
         val haptics = HapticsCompat(context.applicationContext)
         val binding = TimerSettingsDialogBinding.inflate(LayoutInflater.from(context), null, false)
+
+        // TODO
+        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
+        context.contentResolver.registerContentObserver(
+            android.provider.Settings.System.CONTENT_URI,
+            true,
+            object : ContentObserver(Handler(Looper.getMainLooper())) {
+                override fun onChange(selfChange: Boolean, uri: Uri?) {
+                    super.onChange(selfChange, uri)
+
+                    if (uri?.lastPathSegment == "volume_music_speaker") {
+                        // audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
+                    }
+                }
+            })
+
         val dialog = CustomDialog(binding.root)
 
         dialog.setOnShowListener {

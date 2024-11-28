@@ -50,6 +50,9 @@ class TimerTileViewController : TileService() {
     private fun showTimerSettingsDialog() {
         if (timerSettingsDialog?.isShowing == true) return
 
+        // TODO
+        // TimerService.start(applicationContext, 1000000L)
+
         timerSettingsDialog = TimerSettingsDialog.build(
             applicationContext,
             onTimerSet = { timeMillis ->

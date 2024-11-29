@@ -7,4 +7,6 @@
 
     <color name="primary">#FFD8E1FF</color>
     <color name="on_primary">#FF1B1B1F</color>
+
+    <color name="error">#FFF2B9B5</color>
 </resources>

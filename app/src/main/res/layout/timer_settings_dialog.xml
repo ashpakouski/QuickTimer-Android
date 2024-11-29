@@ -31,7 +31,7 @@
         app:layout_constraintTop_toBottomOf="@id/timer_icon" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+        android:id="@+id/time_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
@@ -131,6 +131,38 @@
             app:layout_constraintTop_toBottomOf="@id/label_seconds" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/warning_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="warning_icon,warning_message" />
+
+    <ImageView
+        android:id="@+id/warning_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_warning"
+        android:tint="@color/error"
+        app:layout_constraintBottom_toBottomOf="@id/warning_message"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/warning_message" />
+
+    <TextView
+        android:id="@+id/warning_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/roboto_regular"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="16dp"
+        android:text="@string/error_volume_low"
+        android:textColor="@color/error"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@id/warning_icon"
+        app:layout_constraintTop_toBottomOf="@+id/time_picker" />
+
     <TextView
         android:id="@+id/button_negative"
         android:layout_width="wrap_content"
@@ -161,5 +193,5 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/warning_message" />
 </androidx.constraintlayout.widget.ConstraintLayout>

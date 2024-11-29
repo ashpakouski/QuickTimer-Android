@@ -25,4 +25,5 @@
 
     <!--  Errors  -->
     <string name="error_timer_is_already_running">You have to cancel the running timer before starting a new one</string>
+    <string name="error_volume_low">Your media volume is low. You might not hear the alarm.</string>
 </resources>

@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
+import com.shpak.quicktimer.presentation.setup.TimerSetupDialog
 import com.shpak.quicktimer.util.areNotificationsEnabled
 import com.shpak.quicktimer.util.redirectToNotificationSettings
 
@@ -51,9 +52,9 @@ class TimerTileViewController : TileService() {
         if (timerSettingsDialog?.isShowing == true) return
 
         // TODO
-        // TimerService.start(applicationContext, 1000000L)
+        TimerService.start(applicationContext, 1000000L)
 
-        timerSettingsDialog = TimerSettingsDialog.build(
+        timerSettingsDialog = TimerSetupDialog.build(
             applicationContext,
             onTimerSet = { timeMillis ->
                 TimerService.start(applicationContext, timeMillis)

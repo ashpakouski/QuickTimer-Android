@@ -1,4 +1,4 @@
-package com.shpak.quicktimer.presentation
+package com.shpak.quicktimer.presentation.setup
 
 import android.app.Dialog
 import android.content.Context
@@ -8,11 +8,14 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.NumberPicker
 import com.shpak.quicktimer.databinding.TimerSettingsDialogBinding
+import com.shpak.quicktimer.presentation.CustomDialog
 import com.shpak.quicktimer.util.HapticsCompat
+import com.shpak.quicktimer.util.currentVolumeFraction
 
-object TimerSettingsDialog {
+object TimerSetupDialog {
 
     fun build(
         context: Context,
@@ -24,6 +27,11 @@ object TimerSettingsDialog {
 
         // TODO
         val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
+
+        binding.warningView.visibility = if (
+            audioManager != null && audioManager.currentVolumeFraction() <= 0.3f
+        ) View.VISIBLE else View.GONE
+
         context.contentResolver.registerContentObserver(
             android.provider.Settings.System.CONTENT_URI,
             true,
@@ -32,7 +40,9 @@ object TimerSettingsDialog {
                     super.onChange(selfChange, uri)
 
                     if (uri?.lastPathSegment == "volume_music_speaker") {
-                        // audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
+                        binding.warningView.visibility = if (
+                            audioManager != null && audioManager.currentVolumeFraction() <= 0.3f
+                        ) View.VISIBLE else View.GONE
                     }
                 }
             })

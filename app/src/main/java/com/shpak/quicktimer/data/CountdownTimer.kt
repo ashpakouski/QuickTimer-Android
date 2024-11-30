@@ -3,6 +3,13 @@ package com.shpak.quicktimer.data
 import java.util.Timer
 import java.util.TimerTask
 
+interface TimerListener {
+    fun onTick()
+    fun onTimeOver()
+    fun onTimerPause()
+    fun onTimerCancel()
+}
+
 class CountdownTimer(
     private val timerListener: TimerListener
 ) {
@@ -10,7 +17,9 @@ class CountdownTimer(
         private const val MILLIS_IN_SECOND = 1000L
     }
 
-    private var millisLeft = 0L
+    var millisLeft = 0L
+        private set
+
     private var timer: Timer? = null
 
     // Returns true, if start succeeds and false, if it doesn't
@@ -30,7 +39,7 @@ class CountdownTimer(
             override fun run() {
                 millisLeft -= MILLIS_IN_SECOND
 
-                timerListener.onTick(millisLeft)
+                timerListener.onTick()
 
                 if (millisLeft == 0L) {
                     cancelAndClear()
@@ -44,7 +53,7 @@ class CountdownTimer(
 
     fun pause() {
         cancelAndClear()
-        timerListener.onTimerPause(millisLeft)
+        timerListener.onTimerPause()
     }
 
     fun resume() {

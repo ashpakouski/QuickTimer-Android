@@ -1,107 +1,93 @@
 package com.shpak.quicktimer.presentation.setup
 
-import android.app.Dialog
 import android.content.Context
-import android.database.ContentObserver
-import android.media.AudioManager
-import android.net.Uri
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.NumberPicker
+import com.shpak.quicktimer.data.MediaVolumeTracker
 import com.shpak.quicktimer.databinding.TimerSettingsDialogBinding
 import com.shpak.quicktimer.presentation.CustomDialog
+import com.shpak.quicktimer.presentation.TimerService
 import com.shpak.quicktimer.util.HapticsCompat
-import com.shpak.quicktimer.util.currentVolumeFraction
 
-object TimerSetupDialog {
+class TimerSetupDialog(context: Context) : CustomDialog(context) {
 
-    fun build(
-        context: Context,
-        onTimerSet: ((timeMillis: Long) -> Unit)? = null,
-        onCancel: (() -> Unit)? = null
-    ): Dialog {
-        val haptics = HapticsCompat(context.applicationContext)
-        val binding = TimerSettingsDialogBinding.inflate(LayoutInflater.from(context), null, false)
-
-        // TODO
-        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
-
-        binding.warningView.visibility = if (
-            audioManager != null && audioManager.currentVolumeFraction() <= 0.3f
-        ) View.VISIBLE else View.GONE
-
-        context.contentResolver.registerContentObserver(
-            android.provider.Settings.System.CONTENT_URI,
-            true,
-            object : ContentObserver(Handler(Looper.getMainLooper())) {
-                override fun onChange(selfChange: Boolean, uri: Uri?) {
-                    super.onChange(selfChange, uri)
-
-                    if (uri?.lastPathSegment == "volume_music_speaker") {
-                        binding.warningView.visibility = if (
-                            audioManager != null && audioManager.currentVolumeFraction() <= 0.3f
-                        ) View.VISIBLE else View.GONE
-                    }
-                }
-            })
-
-        val dialog = CustomDialog(binding.root)
-
-        dialog.setOnShowListener {
-            setupPickers(binding) { _, _, _ ->
-                haptics.generateSingleTick()
-                binding.buttonPositive.isEnabled = collectTime(binding) != 0L
-            }
-        }
-
-        binding.buttonPositive.setOnClickListener {
-            onTimerSet?.invoke(
-                collectTime(binding)
-            )
-            dialog.dismiss()
-        }
-
-        binding.buttonNegative.setOnClickListener {
-            onCancel?.invoke()
-            dialog.dismiss()
-        }
-
-        return dialog
+    companion object {
+        private const val MIN_AUDIBLE_VOLUME_FRACTION = 0.35f
     }
 
-    private fun setupPickers(
-        binding: TimerSettingsDialogBinding,
-        onValueChangedListener: NumberPicker.OnValueChangeListener
-    ) {
+    private val volumeTracker = MediaVolumeTracker(context, ::onVolumeFractionChange)
+    private val haptics = HapticsCompat(context)
+
+    private val binding = TimerSettingsDialogBinding.inflate(LayoutInflater.from(context), null, false)
+    private val currentSelectionMillis: Long
+        get() {
+            val hours = binding.hoursPicker.value
+            val minutes = binding.minutesPicker.value
+            val seconds = binding.secondsPicker.value
+
+            return (hours * 60 * 60 + minutes * 60 + seconds) * 1000L
+        }
+
+    init {
+        setContentView(binding.root)
+
+        setOnShowListener { onShow() }
+        setOnDismissListener { onDismiss() }
+        setOnKeyListener(volumeTracker)
+    }
+
+    private fun onShow() {
+        setupPickers(::onPickerStateChange)
+
+        binding.buttonPositive.setOnClickListener { onButtonPositiveClick() }
+        binding.buttonNegative.setOnClickListener { onButtonNegativeClick() }
+
+        volumeTracker.start()
+        volumeTracker.currentVolume?.let(::onVolumeFractionChange)
+    }
+
+    private fun onDismiss() {
+        volumeTracker.stop()
+    }
+
+    private fun onButtonPositiveClick() {
+        TimerService.start(context, currentSelectionMillis)
+        dismiss()
+    }
+
+    private fun onButtonNegativeClick() {
+        dismiss()
+    }
+
+    private fun onPickerStateChange() {
+        haptics.generateSingleTick()
+        binding.buttonPositive.isEnabled = currentSelectionMillis != 0L
+    }
+
+    private fun onVolumeFractionChange(volumeFraction: Float) {
+        binding.warningView.visibility = if (volumeFraction < MIN_AUDIBLE_VOLUME_FRACTION) View.VISIBLE else View.GONE
+    }
+
+    private fun setupPickers(onPickerStateChange: () -> Unit) {
         binding.hoursPicker.apply {
             maxValue = 11
             minValue = 0
             value = 0
-            setOnValueChangedListener(onValueChangedListener)
+            setOnValueChangedListener { _, _, _ -> onPickerStateChange() }
         }
 
         binding.minutesPicker.apply {
             maxValue = 59
             minValue = 0
             value = 0
-            setOnValueChangedListener(onValueChangedListener)
+            setOnValueChangedListener { _, _, _ -> onPickerStateChange() }
         }
 
         binding.secondsPicker.apply {
             maxValue = 59
             minValue = 0
             value = 0
-            setOnValueChangedListener(onValueChangedListener)
+            setOnValueChangedListener { _, _, _ -> onPickerStateChange() }
         }
-    }
-
-    private fun collectTime(binding: TimerSettingsDialogBinding): Long {
-        val hours = binding.hoursPicker.value
-        val minutes = binding.minutesPicker.value
-        val seconds = binding.secondsPicker.value
-
-        return (hours * 60 * 60 + minutes * 60 + seconds) * 1000L
     }
 }

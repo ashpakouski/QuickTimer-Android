@@ -120,21 +120,21 @@ class TimerService : Service(), TimerListener {
         return START_STICKY
     }
 
-    override fun onTick(leftTimeMillis: Long) {
+    override fun onTick() {
         val notification = baseNotificationBuilder
             .addAction(0, getString(R.string.notification_button_cancel), cancelPendingIntent)
             .addAction(0, getString(R.string.notification_button_pause), pausePendingIntent)
-            .setContentTitle(leftTimeMillis.toHhMmSs())
+            .setContentTitle(timer.millisLeft.toHhMmSs())
             .build()
 
         notificationManager.notify(NOTIFICATION_ID, notification)
     }
 
-    override fun onTimerPause(leftTimeMillis: Long) {
+    override fun onTimerPause() {
         val notification = baseNotificationBuilder
             .addAction(0, getString(R.string.notification_button_cancel), cancelPendingIntent)
             .addAction(0, getString(R.string.notification_button_resume), resumePendingIntent)
-            .setContentTitle(leftTimeMillis.toHhMmSs())
+            .setContentTitle(timer.millisLeft.toHhMmSs())
             .build()
 
         notificationManager.notify(NOTIFICATION_ID, notification)

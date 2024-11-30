@@ -14,7 +14,8 @@ object NotificationPermissionRequestDialog {
         val binding = NotificationsPermissionRequestDialogBinding.inflate(
             LayoutInflater.from(context), null, false
         )
-        val dialog = CustomDialog(binding.root)
+        val dialog = object : CustomDialog(binding.root.context) {}
+        dialog.setContentView(binding.root)
 
         binding.buttonPositive.setOnClickListener {
             dialog.dismiss()

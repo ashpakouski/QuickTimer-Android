@@ -20,10 +20,19 @@ fun playSound(
     start()
 }
 
+fun AudioManager.volumeStepFraction(): Float {
+    val volumeMin = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+        getStreamMinVolume(AudioManager.STREAM_MUSIC) else 0
+    val volumeMax = getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+
+    return 1f / (volumeMax - volumeMin).toFloat()
+}
+
 fun AudioManager.currentVolumeFraction(): Float {
     val volumeMin = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
         getStreamMinVolume(AudioManager.STREAM_MUSIC) else 0
     val volumeMax = getStreamMaxVolume(AudioManager.STREAM_MUSIC)
     val volumeCurrent = getStreamVolume(AudioManager.STREAM_MUSIC)
+
     return (volumeCurrent - volumeMin) / (volumeMax - volumeMin).toFloat()
 }

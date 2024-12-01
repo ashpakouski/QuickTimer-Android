@@ -3,6 +3,8 @@ package com.shpak.quicktimer.data
 import java.util.Timer
 import java.util.TimerTask
 
+class TimerAlreadyRunningException : Exception("Timer is already running")
+
 interface TimerListener {
     fun onTick()
     fun onTimeOver()
@@ -17,52 +19,54 @@ class CountdownTimer(
         private const val MILLIS_IN_SECOND = 1000L
     }
 
-    var millisLeft = 0L
-        private set
+    private var startedAtMillis = 0L
+    private var timerDurationMillis = 0L
+    val millisLeft: Long
+        get() = timerDurationMillis - (System.currentTimeMillis() - startedAtMillis)
 
     private var timer: Timer? = null
 
-    // Returns true, if start succeeds and false, if it doesn't
-    // (in case if timer is already running)
-    fun setAndStart(timeMillis: Long): Boolean {
-        if (timer != null) return false
+    fun setAndStart(durationMillis: Long) {
+        if (timer != null) throw TimerAlreadyRunningException()
 
-        if (timeMillis <= 0L) {
-            timerListener.onTimeOver()
-            return true
+        timerDurationMillis = durationMillis
+        startedAtMillis = System.currentTimeMillis()
+
+        if (durationMillis <= 0L) {
+            onTimeOver()
+            return
         }
-
-        millisLeft = timeMillis
 
         timer = Timer()
         timer?.schedule(object : TimerTask() {
             override fun run() {
-                millisLeft -= MILLIS_IN_SECOND
-
                 timerListener.onTick()
 
-                if (millisLeft == 0L) {
-                    cancelAndClear()
-                    timerListener.onTimeOver()
+                if (millisLeft <= 0L) {
+                    onTimeOver()
                 }
             }
-        }, 0, 1000)
-
-        return true
+        }, 0, MILLIS_IN_SECOND)
     }
 
     fun pause() {
         cancelAndClear()
         timerListener.onTimerPause()
+        timerDurationMillis = millisLeft
     }
 
     fun resume() {
-        setAndStart(millisLeft)
+        setAndStart(timerDurationMillis)
     }
 
     fun cancel() {
         cancelAndClear()
         timerListener.onTimerCancel()
+    }
+
+    private fun onTimeOver() {
+        cancelAndClear()
+        timerListener.onTimeOver()
     }
 
     private fun cancelAndClear() {

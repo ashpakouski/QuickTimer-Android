@@ -190,7 +190,7 @@
         android:paddingHorizontal="16dp"
         android:paddingVertical="10dp"
         android:text="@string/timer_settings_button_start"
-        android:textColor="@color/background"
+        android:textColor="@color/on_primary_color_selector"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

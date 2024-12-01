@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.shpak.quicktimer.R
 import com.shpak.quicktimer.data.CountdownTimer
+import com.shpak.quicktimer.data.TimerAlreadyRunningException
 import com.shpak.quicktimer.data.TimerListener
 import com.shpak.quicktimer.util.playSound
 import com.shpak.quicktimer.util.toHhMmSs
@@ -105,11 +106,11 @@ class TimerService : Service(), TimerListener {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val isStarted = timer.setAndStart(
-            timeMillis = intent?.getLongExtra(TIME_MILLIS_KEY, 0L) ?: 0
-        )
-
-        if (!isStarted) {
+        try {
+            timer.setAndStart(
+                durationMillis = intent?.getLongExtra(TIME_MILLIS_KEY, 0L) ?: 0
+            )
+        } catch (e: TimerAlreadyRunningException) {
             Toast.makeText(
                 applicationContext,
                 getText(R.string.error_timer_is_already_running),

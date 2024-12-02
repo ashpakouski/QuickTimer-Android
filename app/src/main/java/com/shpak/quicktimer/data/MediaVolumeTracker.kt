@@ -17,7 +17,7 @@ class MediaVolumeTracker(
     private val onVolumeFractionChange: (Float) -> Unit
 ) : DialogInterface.OnKeyListener {
 
-    private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
+    private val audioManager = context.getSystemService(AudioManager::class.java)
 
     private val systemVolumeChangeListener = object : ContentObserver(Handler(Looper.getMainLooper())) {
         override fun onChange(selfChange: Boolean, uri: Uri?) {

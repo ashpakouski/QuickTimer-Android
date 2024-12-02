@@ -27,7 +27,7 @@ class HapticsCompat(context: Context) {
 }
 
 private class HapticsProviderPreApi31(context: Context) : HapticsProvider {
-    private val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+    private val vibrator = context.getSystemService(Vibrator::class.java)
 
     override fun generateSingleTick() {
         vibrator?.generateSingleTick()
@@ -38,7 +38,7 @@ private class HapticsProviderPreApi31(context: Context) : HapticsProvider {
 private class HapticsProviderApi31(context: Context) : HapticsProvider {
 
     private val vibratorManager =
-        context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as? VibratorManager
+        context.getSystemService(VibratorManager::class.java)
 
     override fun generateSingleTick() {
         val effect = VibrationEffect.Composition.PRIMITIVE_LOW_TICK

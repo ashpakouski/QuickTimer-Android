@@ -13,6 +13,6 @@ fun areNotificationsEnabled(context: Context): Boolean =
             context, Manifest.permission.POST_NOTIFICATIONS
         ) == PackageManager.PERMISSION_GRANTED
     } else {
-        (context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager)
+        context.getSystemService(NotificationManager::class.java)
             ?.areNotificationsEnabled() == true
     }

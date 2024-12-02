@@ -10,6 +10,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -28,6 +29,7 @@ class TimerService : Service(), TimerListener {
 
         private const val TIME_MILLIS_KEY = "time_millis"
         private const val NOTIFICATION_ID = 1
+        private const val PENDING_INTENT_REQUEST_CODE = 2
 
         fun start(context: Context, timeMillis: Long) {
             val startIntent = Intent(context, TimerService::class.java)
@@ -36,11 +38,11 @@ class TimerService : Service(), TimerListener {
         }
     }
 
-    private val timer = CountdownTimer(this)
+    private val timer = CountdownTimer(this, this)
 
     // Can't be "just" val, because context is null during the object initialization
-    private val notificationManager: NotificationManager by lazy {
-        getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+    private val notificationManager: NotificationManager? by lazy {
+        getSystemService(NotificationManager::class.java)
     }
 
     private val baseNotificationBuilder: NotificationCompat.Builder
@@ -53,21 +55,21 @@ class TimerService : Service(), TimerListener {
 
     private val pausePendingIntent: PendingIntent by lazy {
         PendingIntent.getBroadcast(
-            applicationContext, NOTIFICATION_ID,
+            applicationContext, PENDING_INTENT_REQUEST_CODE,
             Intent(ACTION_PAUSE).appendPackageName(), PendingIntent.FLAG_IMMUTABLE
         )
     }
 
     private val cancelPendingIntent: PendingIntent by lazy {
         PendingIntent.getBroadcast(
-            applicationContext, NOTIFICATION_ID,
+            applicationContext, PENDING_INTENT_REQUEST_CODE,
             Intent(ACTION_CANCEL).appendPackageName(), PendingIntent.FLAG_IMMUTABLE
         )
     }
 
     private val resumePendingIntent: PendingIntent by lazy {
         PendingIntent.getBroadcast(
-            applicationContext, NOTIFICATION_ID,
+            applicationContext, PENDING_INTENT_REQUEST_CODE,
             Intent(ACTION_RESUME).appendPackageName(), PendingIntent.FLAG_IMMUTABLE
         )
     }
@@ -88,7 +90,7 @@ class TimerService : Service(), TimerListener {
             getString(R.string.notification_channel_name),
             NotificationManager.IMPORTANCE_MIN
         ).apply {
-            notificationManager.createNotificationChannel(this)
+            notificationManager?.createNotificationChannel(this)
         }
     }
 
@@ -107,8 +109,9 @@ class TimerService : Service(), TimerListener {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         try {
+            val durationMillis = intent?.getLongExtra(TIME_MILLIS_KEY, 0L) ?: 0
             timer.setAndStart(
-                durationMillis = intent?.getLongExtra(TIME_MILLIS_KEY, 0L) ?: 0
+                durationMillis = durationMillis
             )
         } catch (e: TimerAlreadyRunningException) {
             Toast.makeText(
@@ -128,7 +131,7 @@ class TimerService : Service(), TimerListener {
             .setContentTitle(timer.millisLeft.toHhMmSs())
             .build()
 
-        notificationManager.notify(NOTIFICATION_ID, notification)
+        notificationManager?.notify(NOTIFICATION_ID, notification)
     }
 
     override fun onTimerPause() {
@@ -138,7 +141,7 @@ class TimerService : Service(), TimerListener {
             .setContentTitle(timer.millisLeft.toHhMmSs())
             .build()
 
-        notificationManager.notify(NOTIFICATION_ID, notification)
+        notificationManager?.notify(NOTIFICATION_ID, notification)
     }
 
     override fun onTimerCancel() = stopSelf()
@@ -148,7 +151,7 @@ class TimerService : Service(), TimerListener {
             .setContentTitle((0L).toHhMmSs())
             .build()
 
-        notificationManager.notify(NOTIFICATION_ID, notification)
+        notificationManager?.notify(NOTIFICATION_ID, notification)
 
         playSound(applicationContext, R.raw.double_ping) {
             stopSelf()

@@ -16,8 +16,6 @@ class TimerAlreadyRunningException : Exception("Timer is already running")
 interface TimerListener {
     fun onTick()
     fun onTimeOver()
-    fun onTimerPause()
-    fun onTimerCancel()
 }
 
 class CountdownTimer(
@@ -72,7 +70,6 @@ class CountdownTimer(
 
     fun pause() {
         cancelAndClear()
-        timerListener.onTimerPause()
         timerDurationMillis = millisLeft
     }
 
@@ -82,7 +79,6 @@ class CountdownTimer(
 
     fun cancel() {
         cancelAndClear()
-        timerListener.onTimerCancel()
     }
 
     private fun registerSystemAlarm(durationMillis: Long) {

@@ -6,6 +6,7 @@ import android.view.View
 import com.shpak.quicktimer.data.MediaVolumeTracker
 import com.shpak.quicktimer.databinding.TimerSettingsDialogBinding
 import com.shpak.quicktimer.presentation.CustomDialog
+import com.shpak.quicktimer.presentation.QuantKeeper
 import com.shpak.quicktimer.presentation.TimerService
 import com.shpak.quicktimer.util.HapticsCompat
 
@@ -18,7 +19,10 @@ class TimerSetupDialog(context: Context) : CustomDialog(context) {
     private val volumeTracker = MediaVolumeTracker(context, ::onVolumeFractionChange)
     private val haptics = HapticsCompat(context)
 
-    private val binding = TimerSettingsDialogBinding.inflate(LayoutInflater.from(context), null, false)
+    private val binding = TimerSettingsDialogBinding.inflate(
+        LayoutInflater.from(context), null, false
+    )
+
     private val currentSelectionMillis: Long
         get() {
             val hours = binding.hoursPicker.value
@@ -37,6 +41,8 @@ class TimerSetupDialog(context: Context) : CustomDialog(context) {
     }
 
     private fun onShow() {
+        QuantKeeper.start(context)
+
         setupPickers(::onPickerStateChange)
 
         binding.buttonPositive.setOnClickListener { onButtonPositiveClick() }
@@ -47,6 +53,8 @@ class TimerSetupDialog(context: Context) : CustomDialog(context) {
     }
 
     private fun onDismiss() {
+        QuantKeeper.stop(context)
+
         volumeTracker.stop()
     }
 
@@ -65,7 +73,8 @@ class TimerSetupDialog(context: Context) : CustomDialog(context) {
     }
 
     private fun onVolumeFractionChange(volumeFraction: Float) {
-        binding.warningView.visibility = if (volumeFraction < MIN_AUDIBLE_VOLUME_FRACTION) View.VISIBLE else View.GONE
+        binding.warningView.visibility =
+            if (volumeFraction < MIN_AUDIBLE_VOLUME_FRACTION) View.VISIBLE else View.GONE
     }
 
     private fun setupPickers(onPickerStateChange: () -> Unit) {

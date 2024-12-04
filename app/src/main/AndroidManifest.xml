@@ -31,5 +31,9 @@
         <service
             android:name=".presentation.TimerService"
             android:foregroundServiceType="dataSync" />
+
+        <service
+            android:name=".presentation.QuantKeeper"
+            android:foregroundServiceType="dataSync" />
     </application>
 </manifest>

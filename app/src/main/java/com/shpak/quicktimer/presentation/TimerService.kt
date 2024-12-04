@@ -10,7 +10,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
-import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -18,6 +17,7 @@ import com.shpak.quicktimer.R
 import com.shpak.quicktimer.data.CountdownTimer
 import com.shpak.quicktimer.data.TimerAlreadyRunningException
 import com.shpak.quicktimer.data.TimerListener
+import com.shpak.quicktimer.util.lazyTryOrNull
 import com.shpak.quicktimer.util.playSound
 import com.shpak.quicktimer.util.toHhMmSs
 
@@ -38,10 +38,9 @@ class TimerService : Service(), TimerListener {
         }
     }
 
-    private val timer = CountdownTimer(this, this)
+    private val timer by lazyTryOrNull { CountdownTimer(this, this) }
 
-    // Can't be "just" val, because context is null during the object initialization
-    private val notificationManager: NotificationManager? by lazy {
+    private val notificationManager by lazyTryOrNull {
         getSystemService(NotificationManager::class.java)
     }
 
@@ -77,11 +76,31 @@ class TimerService : Service(), TimerListener {
     private val buttonClickReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.action) {
-                ACTION_PAUSE -> timer.pause()
-                ACTION_RESUME -> timer.resume()
-                ACTION_CANCEL -> timer.cancel()
+                ACTION_PAUSE -> onPauseRequested()
+                ACTION_RESUME -> timer?.resume()
+                ACTION_CANCEL -> onCancellationRequested()
             }
         }
+    }
+
+    private fun onPauseRequested() {
+        val timer = timer ?: return
+        val millisLeft = timer.millisLeft
+
+        timer.pause()
+
+        val notification = baseNotificationBuilder
+            .addAction(0, getString(R.string.notification_button_cancel), cancelPendingIntent)
+            .addAction(0, getString(R.string.notification_button_resume), resumePendingIntent)
+            .setContentTitle(millisLeft.toHhMmSs())
+            .build()
+
+        notificationManager?.notify(NOTIFICATION_ID, notification)
+    }
+
+    private fun onCancellationRequested() {
+        timer?.cancel()
+        stopSelf()
     }
 
     private fun createNotificationChannel() {
@@ -95,22 +114,22 @@ class TimerService : Service(), TimerListener {
     }
 
     override fun onCreate() {
+        super.onCreate()
         createNotificationChannel()
         startForeground(NOTIFICATION_ID, baseNotificationBuilder.build())
         registerButtonClickReceiver()
-        super.onCreate()
     }
 
     override fun onDestroy() {
-        unregisterButtonClickReceiver()
-        timer.cancel()
         super.onDestroy()
+        unregisterButtonClickReceiver()
+        timer?.cancel()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         try {
             val durationMillis = intent?.getLongExtra(TIME_MILLIS_KEY, 0L) ?: 0
-            timer.setAndStart(
+            timer?.setAndStart(
                 durationMillis = durationMillis
             )
         } catch (e: TimerAlreadyRunningException) {
@@ -125,6 +144,8 @@ class TimerService : Service(), TimerListener {
     }
 
     override fun onTick() {
+        val timer = timer ?: return
+
         val notification = baseNotificationBuilder
             .addAction(0, getString(R.string.notification_button_cancel), cancelPendingIntent)
             .addAction(0, getString(R.string.notification_button_pause), pausePendingIntent)
@@ -133,18 +154,6 @@ class TimerService : Service(), TimerListener {
 
         notificationManager?.notify(NOTIFICATION_ID, notification)
     }
-
-    override fun onTimerPause() {
-        val notification = baseNotificationBuilder
-            .addAction(0, getString(R.string.notification_button_cancel), cancelPendingIntent)
-            .addAction(0, getString(R.string.notification_button_resume), resumePendingIntent)
-            .setContentTitle(timer.millisLeft.toHhMmSs())
-            .build()
-
-        notificationManager?.notify(NOTIFICATION_ID, notification)
-    }
-
-    override fun onTimerCancel() = stopSelf()
 
     override fun onTimeOver() {
         val notification = baseNotificationBuilder

@@ -129,7 +129,7 @@ class TimerService : Service(), TimerListener {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         try {
             val durationMillis = intent?.getLongExtra(TIME_MILLIS_KEY, 0L) ?: 0
-            timer?.setAndStart(
+            timer?.start(
                 durationMillis = durationMillis
             )
         } catch (e: TimerAlreadyRunningException) {

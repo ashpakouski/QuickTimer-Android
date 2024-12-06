@@ -1,4 +1,4 @@
-package com.shpak.quicktimer.data
+package com.shpak.quicktimer.data.timer
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -7,15 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import androidx.core.content.ContextCompat
-import java.util.Timer
-import java.util.TimerTask
-
-class TimerAlreadyRunningException : Exception("Timer is already running")
-
-interface TimerToggle {
-    fun start(durationMillis: Long)
-    fun cancel()
-}
 
 class SystemTimer(
     private val context: Context,
@@ -91,90 +82,6 @@ class SystemTimer(
         } catch (e: IllegalArgumentException) {
             e.printStackTrace()
         }
-    }
-}
-
-class TickGenerator(
-    val onTick: () -> Unit
-) {
-    companion object {
-        private const val MILLIS_IN_SECOND = 1000L
-    }
-
-    private var timer: Timer? = null
-
-    fun start() {
-        if (timer != null) throw TimerAlreadyRunningException()
-
-        registerTickTimer()
-    }
-
-    fun cancel() {
-        timer?.cancel()
-        timer = null
-    }
-
-    private fun registerTickTimer() {
-        timer = Timer().apply {
-            schedule(object : TimerTask() {
-                override fun run() = onTick()
-            }, 0, MILLIS_IN_SECOND)
-        }
-    }
-}
-
-interface TimerListener {
-    fun onTick()
-    fun onTimeOver()
-}
-
-class CountdownTimer(
-    private val timerListener: TimerListener,
-    context: Context
-) : TimerToggle {
-
-    private var startedAtMillis = 0L
-    private var timerDurationMillis = 0L
-    val millisLeft get() = timerDurationMillis - (System.currentTimeMillis() - startedAtMillis)
-
-    private var isFinished = false
-
-    private val tickGenerator = TickGenerator(onTick = {
-        if (millisLeft >= 0) timerListener.onTick()
-        if (millisLeft <= 0) onTimeOver()
-    })
-
-    private val systemTimer = SystemTimer(context, onTimeOver = ::onTimeOver)
-
-    override fun start(durationMillis: Long) {
-        startedAtMillis = System.currentTimeMillis()
-        timerDurationMillis = durationMillis
-
-        tickGenerator.start()
-        systemTimer.start(durationMillis)
-    }
-
-    fun pause() {
-        cancel()
-        timerDurationMillis = millisLeft
-    }
-
-    fun resume() {
-        start(timerDurationMillis)
-    }
-
-    private fun onTimeOver() {
-        if (isFinished) return
-
-        isFinished = true
-
-        tickGenerator.cancel()
-        timerListener.onTimeOver()
-    }
-
-    override fun cancel() {
-        tickGenerator.cancel()
-        systemTimer.cancel()
     }
 }
 

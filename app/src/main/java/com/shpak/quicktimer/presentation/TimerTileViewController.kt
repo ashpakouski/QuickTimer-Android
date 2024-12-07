@@ -3,9 +3,9 @@ package com.shpak.quicktimer.presentation
 import android.app.Dialog
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import com.shpak.quicktimer.presentation.setup.TimerSetupDialog
+import android.widget.Toast
+import com.shpak.quicktimer.R
 import com.shpak.quicktimer.util.areNotificationsEnabled
-import com.shpak.quicktimer.util.redirectToNotificationSettings
 
 class TimerTileViewController : TileService() {
 
@@ -21,17 +21,25 @@ class TimerTileViewController : TileService() {
     override fun onClick() {
         super.onClick()
 
-        if (areNotificationsEnabled(applicationContext)) {
-            showTimerSettingsDialog()
-        } else {
-            requestNotificationsPermission()
+        try {
+            if (areNotificationsEnabled(applicationContext)) {
+                showTimerSettingsDialog()
+            } else {
+                requestNotificationsPermission()
+            }
+        } catch (e: Exception) {
+            Toast.makeText(
+                applicationContext,
+                R.string.error_cant_show_dialog,
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
     private fun showTimerSettingsDialog() {
         if (timerSettingsDialog?.isShowing == true) return
 
-        timerSettingsDialog = TimerSetupDialog(this).apply {
+        timerSettingsDialog = TimerSetupDialog(applicationContext).apply {
             showDialog(this)
         }
     }
@@ -39,12 +47,7 @@ class TimerTileViewController : TileService() {
     private fun requestNotificationsPermission() {
         if (permissionRequestDialog?.isShowing == true) return
 
-        permissionRequestDialog = NotificationPermissionRequestDialog.build(
-            applicationContext,
-            onRequestGranted = {
-                redirectToNotificationSettings(applicationContext)
-            }
-        ).apply {
+        permissionRequestDialog = NotificationPermissionRequestDialog(applicationContext).apply {
             showDialog(this)
         }
     }

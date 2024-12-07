@@ -1,13 +1,10 @@
-package com.shpak.quicktimer.presentation.setup
+package com.shpak.quicktimer.presentation
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import com.shpak.quicktimer.data.MediaVolumeTracker
 import com.shpak.quicktimer.databinding.TimerSettingsDialogBinding
-import com.shpak.quicktimer.presentation.CustomDialog
-import com.shpak.quicktimer.presentation.QuantKeeper
-import com.shpak.quicktimer.presentation.TimerService
 import com.shpak.quicktimer.util.HapticsCompat
 
 class TimerSetupDialog(context: Context) : CustomDialog(context) {

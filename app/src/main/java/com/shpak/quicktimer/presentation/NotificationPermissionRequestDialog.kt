@@ -1,32 +1,30 @@
 package com.shpak.quicktimer.presentation
 
-import android.app.Dialog
 import android.content.Context
 import android.view.LayoutInflater
 import com.shpak.quicktimer.databinding.NotificationsPermissionRequestDialogBinding
+import com.shpak.quicktimer.util.redirectToNotificationSettings
 
-object NotificationPermissionRequestDialog {
-    fun build(
-        context: Context,
-        onRequestGranted: (() -> Unit)? = null,
-        onRequestDenied: (() -> Unit)? = null
-    ): Dialog {
-        val binding = NotificationsPermissionRequestDialogBinding.inflate(
-            LayoutInflater.from(context), null, false
-        )
-        val dialog = object : CustomDialog(binding.root.context) {}
-        dialog.setContentView(binding.root)
+class NotificationPermissionRequestDialog(context: Context) : CustomDialog(context) {
 
+    private val binding = NotificationsPermissionRequestDialogBinding.inflate(
+        LayoutInflater.from(context), null, false
+    )
+
+    init {
+        setContentView(binding.root)
+
+        setOnShowListener { onShow() }
+    }
+
+    private fun onShow() {
         binding.buttonPositive.setOnClickListener {
-            dialog.dismiss()
-            onRequestGranted?.invoke()
+            redirectToNotificationSettings(context.applicationContext)
+            dismiss()
         }
 
         binding.buttonNegative.setOnClickListener {
-            dialog.dismiss()
-            onRequestDenied?.invoke()
+            dismiss()
         }
-
-        return dialog
     }
 }

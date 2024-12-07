@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import com.shpak.quicktimer.R
 import com.shpak.quicktimer.data.timer.SingleUseCountdownTimer
 import com.shpak.quicktimer.data.timer.TimerListener
+import com.shpak.quicktimer.util.Debouncer
 import com.shpak.quicktimer.util.lazyTryOrNull
 import com.shpak.quicktimer.util.playSound
 import com.shpak.quicktimer.util.toHhMmSs
@@ -73,10 +74,12 @@ class TimerService : Service(), TimerListener {
     }
 
     private val buttonClickReceiver = object : BroadcastReceiver() {
+        private val pauseResumeDebouncer = Debouncer(1000L)
+
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.action) {
-                ACTION_PAUSE -> onPauseRequested()
-                ACTION_RESUME -> timer?.resume()
+                ACTION_PAUSE -> pauseResumeDebouncer.call { onPauseRequested() }
+                ACTION_RESUME -> pauseResumeDebouncer.call { timer?.resume() }
                 ACTION_CANCEL -> onCancellationRequested()
             }
         }
@@ -99,6 +102,7 @@ class TimerService : Service(), TimerListener {
 
     private fun onCancellationRequested() {
         timer?.cancel()
+        unregisterButtonClickReceiver()
         stopSelf()
     }
 
@@ -114,15 +118,17 @@ class TimerService : Service(), TimerListener {
 
     override fun onCreate() {
         super.onCreate()
+
         createNotificationChannel()
         startForeground(NOTIFICATION_ID, baseNotificationBuilder.build())
         registerButtonClickReceiver()
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         unregisterButtonClickReceiver()
         timer?.cancel()
+
+        super.onDestroy()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -161,9 +167,7 @@ class TimerService : Service(), TimerListener {
 
         notificationManager?.notify(NOTIFICATION_ID, notification)
 
-        playSound(applicationContext, R.raw.double_ping) {
-            stopSelf()
-        }
+        playSound(applicationContext, R.raw.double_ping, onComplete = ::stopSelf)
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -182,11 +186,9 @@ class TimerService : Service(), TimerListener {
     }
 
     private fun unregisterButtonClickReceiver() {
-        // FIXME: For some reasons, "unregisterReceiver" throws
-        //  .IllegalArgumentException: Receiver not registered
         try {
-            unregisterReceiver(buttonClickReceiver)
-        } catch (e: IllegalArgumentException) {
+            applicationContext.unregisterReceiver(buttonClickReceiver)
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }

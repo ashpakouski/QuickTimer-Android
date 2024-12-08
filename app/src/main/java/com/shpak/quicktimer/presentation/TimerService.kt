@@ -1,9 +1,5 @@
 package com.shpak.quicktimer.presentation
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
 import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -11,12 +7,12 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
 import android.widget.Toast
-import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.shpak.quicktimer.R
 import com.shpak.quicktimer.data.timer.SingleUseCountdownTimer
 import com.shpak.quicktimer.data.timer.TimerListener
 import com.shpak.quicktimer.util.Debouncer
+import com.shpak.quicktimer.util.getNotificationButton
 import com.shpak.quicktimer.util.lazyTryOrNull
 import com.shpak.quicktimer.util.playSound
 import com.shpak.quicktimer.util.toHhMmSs
@@ -27,49 +23,40 @@ class TimerService : Service(), TimerListener {
         private const val ACTION_RESUME = "action_resume"
         private const val ACTION_CANCEL = "action_cancel"
 
-        private const val TIME_MILLIS_KEY = "time_millis"
-        private const val NOTIFICATION_ID = 1
-        private const val PENDING_INTENT_REQUEST_CODE = 2
+        private const val KEY_TIME_MILLIS = "time_millis"
+
+        private const val NOTIFICATION_ID = 7
 
         fun start(context: Context, timeMillis: Long) {
             val startIntent = Intent(context, TimerService::class.java)
-            startIntent.putExtra(TIME_MILLIS_KEY, timeMillis)
+            startIntent.putExtra(KEY_TIME_MILLIS, timeMillis)
             context.startForegroundService(startIntent)
         }
     }
 
-    private val timer by lazyTryOrNull { SingleUseCountdownTimer(this, this) }
-
-    private val notificationManager by lazyTryOrNull {
-        getSystemService(NotificationManager::class.java)
+    private val timer by lazyTryOrNull {
+        SingleUseCountdownTimer(this, applicationContext)
     }
 
-    private val baseNotificationBuilder: NotificationCompat.Builder
-        get() = NotificationCompat
-            .Builder(applicationContext, getString(R.string.notification_channel_id))
-            .setOngoing(true)
-            .setSmallIcon(R.drawable.ic_timer)
-            .setPriority(NotificationManager.IMPORTANCE_MIN)
-            .setCategory(Notification.CATEGORY_SERVICE)
+    private val notificationController by lazyTryOrNull {
+        NotificationController(applicationContext)
+    }
 
-    private val pausePendingIntent: PendingIntent by lazy {
-        PendingIntent.getBroadcast(
-            applicationContext, PENDING_INTENT_REQUEST_CODE,
-            Intent(ACTION_PAUSE).appendPackageName(), PendingIntent.FLAG_IMMUTABLE
+    private val notificationButtonPause by lazyTryOrNull {
+        getNotificationButton(
+            applicationContext, ACTION_PAUSE, R.string.notification_button_pause
         )
     }
 
-    private val cancelPendingIntent: PendingIntent by lazy {
-        PendingIntent.getBroadcast(
-            applicationContext, PENDING_INTENT_REQUEST_CODE,
-            Intent(ACTION_CANCEL).appendPackageName(), PendingIntent.FLAG_IMMUTABLE
+    private val notificationButtonResume by lazyTryOrNull {
+        getNotificationButton(
+            applicationContext, ACTION_RESUME, R.string.notification_button_resume
         )
     }
 
-    private val resumePendingIntent: PendingIntent by lazy {
-        PendingIntent.getBroadcast(
-            applicationContext, PENDING_INTENT_REQUEST_CODE,
-            Intent(ACTION_RESUME).appendPackageName(), PendingIntent.FLAG_IMMUTABLE
+    private val notificationButtonCancel by lazyTryOrNull {
+        getNotificationButton(
+            applicationContext, ACTION_CANCEL, R.string.notification_button_cancel
         )
     }
 
@@ -91,13 +78,12 @@ class TimerService : Service(), TimerListener {
 
         timer.pause()
 
-        val notification = baseNotificationBuilder
-            .addAction(0, getString(R.string.notification_button_cancel), cancelPendingIntent)
-            .addAction(0, getString(R.string.notification_button_resume), resumePendingIntent)
-            .setContentTitle(millisLeft.toHhMmSs())
-            .build()
-
-        notificationManager?.notify(NOTIFICATION_ID, notification)
+        notificationController?.postNotification(
+            NOTIFICATION_ID, millisLeft.toHhMmSs(),
+            actions = listOfNotNull(
+                notificationButtonCancel, notificationButtonResume
+            )
+        )
     }
 
     private fun onCancellationRequested() {
@@ -106,21 +92,13 @@ class TimerService : Service(), TimerListener {
         stopSelf()
     }
 
-    private fun createNotificationChannel() {
-        NotificationChannel(
-            getString(R.string.notification_channel_id),
-            getString(R.string.notification_channel_name),
-            NotificationManager.IMPORTANCE_MIN
-        ).apply {
-            notificationManager?.createNotificationChannel(this)
-        }
-    }
-
     override fun onCreate() {
         super.onCreate()
 
-        createNotificationChannel()
-        startForeground(NOTIFICATION_ID, baseNotificationBuilder.build())
+        notificationController?.getNotification("")?.let {
+            startForeground(NOTIFICATION_ID, it)
+        }
+
         registerButtonClickReceiver()
     }
 
@@ -133,7 +111,7 @@ class TimerService : Service(), TimerListener {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (timer?.isRunning == false) {
-            val durationMillis = intent?.getLongExtra(TIME_MILLIS_KEY, 0L) ?: 0
+            val durationMillis = intent?.getLongExtra(KEY_TIME_MILLIS, 0L) ?: 0
             timer?.start(
                 durationMillis = durationMillis
             )
@@ -151,21 +129,18 @@ class TimerService : Service(), TimerListener {
     override fun onTick() {
         val timer = timer ?: return
 
-        val notification = baseNotificationBuilder
-            .addAction(0, getString(R.string.notification_button_cancel), cancelPendingIntent)
-            .addAction(0, getString(R.string.notification_button_pause), pausePendingIntent)
-            .setContentTitle(timer.millisLeft.toHhMmSs())
-            .build()
-
-        notificationManager?.notify(NOTIFICATION_ID, notification)
+        notificationController?.postNotification(
+            NOTIFICATION_ID, timer.millisLeft.toHhMmSs(),
+            actions = listOfNotNull(
+                notificationButtonCancel, notificationButtonPause
+            )
+        )
     }
 
     override fun onTimeOver() {
-        val notification = baseNotificationBuilder
-            .setContentTitle((0L).toHhMmSs())
-            .build()
-
-        notificationManager?.notify(NOTIFICATION_ID, notification)
+        notificationController?.postNotification(
+            NOTIFICATION_ID, (0L).toHhMmSs()
+        )
 
         playSound(applicationContext, R.raw.double_ping, onComplete = ::stopSelf)
     }
@@ -191,9 +166,5 @@ class TimerService : Service(), TimerListener {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-    }
-
-    private fun Intent.appendPackageName(): Intent = apply {
-        `package` = applicationContext.packageName
     }
 }

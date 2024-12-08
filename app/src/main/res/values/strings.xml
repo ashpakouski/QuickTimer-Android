@@ -15,6 +15,7 @@
     <string name="timer_settings_label_hours">Hours</string>
     <string name="timer_settings_button_cancel">Cancel</string>
     <string name="timer_settings_button_start">Start</string>
+    <string name="timer_settings_keeper_message">Waiting for the timer to be set up…</string>
 
     <!--  Notifications  -->
     <string name="notification_channel_name">Quick Timer Notifications</string>

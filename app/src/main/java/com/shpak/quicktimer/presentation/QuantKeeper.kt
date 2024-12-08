@@ -1,13 +1,9 @@
 package com.shpak.quicktimer.presentation
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
-import androidx.core.app.NotificationCompat
 import com.shpak.quicktimer.R
 import com.shpak.quicktimer.util.lazyTryOrNull
 
@@ -27,17 +23,9 @@ class QuantKeeper : Service() {
         }
     }
 
-    private val notificationManager by lazyTryOrNull {
-        getSystemService(NotificationManager::class.java)
+    private val notificationController by lazyTryOrNull {
+        NotificationController(applicationContext)
     }
-
-    private val baseNotificationBuilder: NotificationCompat.Builder
-        get() = NotificationCompat
-            .Builder(applicationContext, getString(R.string.notification_channel_id))
-            .setOngoing(true)
-            .setSmallIcon(R.drawable.ic_timer)
-            .setPriority(NotificationManager.IMPORTANCE_MIN)
-            .setCategory(Notification.CATEGORY_SERVICE)
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -50,18 +38,10 @@ class QuantKeeper : Service() {
     override fun onCreate() {
         super.onCreate()
 
-        createNotificationChannel()
-        startForeground(NOTIFICATION_ID, baseNotificationBuilder.setContentTitle("Keeper").build())
-        //notificationManager?.notify(NOTIFICATION_ID, baseNotificationBuilder.setContentTitle("Keeper").build())
-    }
-
-    private fun createNotificationChannel() {
-        NotificationChannel(
-            getString(R.string.notification_channel_id),
-            getString(R.string.notification_channel_name),
-            NotificationManager.IMPORTANCE_MIN
-        ).apply {
-            notificationManager?.createNotificationChannel(this)
+        notificationController?.getNotification(
+            getString(R.string.timer_settings_keeper_message)
+        )?.let {
+            startForeground(NOTIFICATION_ID, it)
         }
     }
 }

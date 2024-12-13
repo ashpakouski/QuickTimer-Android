@@ -1,18 +1,27 @@
+
 # Quick Timer ⏳
 
-Quick Timer is a simple timer app, that you can launch from quick settings tile, then use a dialog to pick time and control the execution via notification.
+Set and manage timer directly from your Quick Settings - no regular app screen!
 
-## Screenshots
+|![1](https://github.com/user-attachments/assets/c72dce0c-8b97-44f3-8313-836ca3420515)|![2](https://github.com/user-attachments/assets/4fb37891-0b93-4a4a-9d2e-bfe17f7e5138)|![3](https://github.com/user-attachments/assets/81166b6d-f09c-41c0-bf12-b18d306f696b)|
+| :---: | :---: | :---: |
 
-[<img src="https://github.com/AndreiShpakovskiy/QuickTimer-Android/assets/50966785/4dc3cbe2-181d-438c-87d1-b02abd6e093b" align="center"
-width="170" hspace="5" vspace="10">](https://github.com/AndreiShpakovskiy/QuickTimer-Android/assets/50966785/4dc3cbe2-181d-438c-87d1-b02abd6e093b)
-[<img src="https://github.com/AndreiShpakovskiy/QuickTimer-Android/assets/50966785/27da51fa-5b10-4e91-a104-ca68d6981245" align="center"
-width="170" hspace="5" vspace="10">](https://github.com/AndreiShpakovskiy/QuickTimer-Android/assets/50966785/27da51fa-5b10-4e91-a104-ca68d6981245)
-[<img src="https://github.com/AndreiShpakovskiy/QuickTimer-Android/assets/50966785/d5effb62-eef8-458d-9528-2815f88e4dfe" align="center"
-width="170" hspace="5" vspace="10">](https://github.com/AndreiShpakovskiy/QuickTimer-Android/assets/50966785/d5effb62-eef8-458d-9528-2815f88e4dfe)
-[<img src="https://github.com/AndreiShpakovskiy/QuickTimer-Android/assets/50966785/ea8d2167-c58a-4f59-ad30-e86dbfcdc0b9" align="center"
-width="170" hspace="5" vspace="10">](https://github.com/AndreiShpakovskiy/QuickTimer-Android/assets/50966785/ea8d2167-c58a-4f59-ad30-e86dbfcdc0b9)
+## How to get started
+
+1. Add the Timer to Quick Settings:
+- Swipe down from the top of your screen to open Quick Settings.
+- Tap the pencil icon or "Edit" to customize your tiles.
+- Drag the "Timer" tile into the active area.
+
+2. Set up your timer:
+- Tap the "Timer" tile to open the timer setup dialog.
+- Grant notifications permission (if needed).
+- Use the pickers to set the desired time and press "Start".
+
+3. Follow the Timer in Notifications:
+- Once the timer starts, a notification shows the remaining time.
+- Pause, resume, or cancel the timer directly from the notification with one tap.
 
 ## Follow for more!
 
-[<img src="https://github.com/AndreiShpakovskiy/BmpViewer/assets/50966785/026046f6-a25d-49bf-861d-776629be14aa" height="50">](https://linkedin.com/in/andreishpakovskiy)
+[<img src="https://github.com/AndreiShpakovskiy/BmpViewer/assets/50966785/026046f6-a25d-49bf-861d-776629be14aa" height="50">](https://linkedin.com/in/ashpakouski)

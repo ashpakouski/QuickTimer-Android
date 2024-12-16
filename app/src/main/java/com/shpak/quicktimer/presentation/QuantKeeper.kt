@@ -14,12 +14,20 @@ class QuantKeeper : Service() {
 
         fun start(context: Context) {
             val startIntent = Intent(context, QuantKeeper::class.java)
-            context.startForegroundService(startIntent)
+
+            try {
+                context.startForegroundService(startIntent)
+            } catch (_: Exception) {
+            }
         }
 
         fun stop(context: Context) {
             val stopIntent = Intent(context, QuantKeeper::class.java)
-            context.stopService(stopIntent)
+
+            try {
+                context.stopService(stopIntent)
+            } catch (_: Exception) {
+            }
         }
     }
 

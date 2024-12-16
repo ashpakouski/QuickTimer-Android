@@ -156,7 +156,7 @@
         android:fontFamily="@font/roboto_regular"
         android:paddingHorizontal="16dp"
         android:paddingVertical="16dp"
-        android:text="@string/error_volume_low"
+        android:text="@string/warning_volume_low"
         android:textColor="@color/error"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"

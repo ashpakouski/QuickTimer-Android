@@ -30,7 +30,14 @@ class TimerService : Service(), TimerListener {
         fun start(context: Context, timeMillis: Long) {
             val startIntent = Intent(context, TimerService::class.java)
             startIntent.putExtra(KEY_TIME_MILLIS, timeMillis)
-            context.startForegroundService(startIntent)
+
+            try {
+                context.startForegroundService(startIntent)
+            } catch (_: Exception) {
+                Toast.makeText(
+                    context, R.string.error_cant_start_timer_service, Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
@@ -117,9 +124,7 @@ class TimerService : Service(), TimerListener {
             )
         } else {
             Toast.makeText(
-                applicationContext,
-                getText(R.string.error_timer_is_already_running),
-                Toast.LENGTH_LONG
+                applicationContext, R.string.error_timer_is_already_running, Toast.LENGTH_LONG
             ).show()
         }
 

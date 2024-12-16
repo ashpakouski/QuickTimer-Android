@@ -29,9 +29,7 @@ class TimerTileViewController : TileService() {
             }
         } catch (e: Exception) {
             Toast.makeText(
-                applicationContext,
-                R.string.error_cant_show_dialog,
-                Toast.LENGTH_SHORT
+                applicationContext, R.string.error_cant_show_dialog, Toast.LENGTH_SHORT
             ).show()
         }
     }

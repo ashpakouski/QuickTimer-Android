@@ -1,10 +1,14 @@
 
 # Quick Timer ⏳
 
-Set and manage timer directly from your Quick Settings - no regular app screen!
+Meet Quick Timer – a minimalistic Android app that requires exactly Zero Activities to operate! Set and manage your a directly from Quick Settings – no need for a regular app screen!
 
-|![1](https://github.com/user-attachments/assets/c72dce0c-8b97-44f3-8313-836ca3420515)|![2](https://github.com/user-attachments/assets/4fb37891-0b93-4a4a-9d2e-bfe17f7e5138)|![3](https://github.com/user-attachments/assets/81166b6d-f09c-41c0-bf12-b18d306f696b)|
+|![1](https://github.com/user-attachments/assets/eb2f9b97-f1dd-4c5e-9372-4fe3eb433524)|![2](https://github.com/user-attachments/assets/27efc4d1-6294-42c8-8c71-31277f7b5f4d)|![3](https://github.com/user-attachments/assets/3afc431d-6b37-47f6-8caa-cad4fb32b8e8)|
 | :---: | :---: | :---: |
+
+[![Quick Timer Demo](https://github.com/user-attachments/assets/dee2991d-284a-4624-806f-515b87b63099)](https://youtu.be/qjt7PbjlHBg)
+| :---: |
+👆 Click redirects to YouTube
 
 ## How to get started
 
@@ -22,6 +26,6 @@ Set and manage timer directly from your Quick Settings - no regular app screen!
 - Once the timer starts, a notification shows the remaining time.
 - Pause, resume, or cancel the timer directly from the notification with one tap.
 
-## Follow for more!
+## Download
 
-[<img src="https://github.com/AndreiShpakovskiy/BmpViewer/assets/50966785/026046f6-a25d-49bf-861d-776629be14aa" height="50">](https://linkedin.com/in/ashpakouski)
+[<img src="https://github.com/user-attachments/assets/fdcf14f1-ad28-485c-a143-aa37a53ebfdc" height="100">](https://play.google.com/store/apps/details?id=com.shpak.quicktimer)

@@ -1,7 +1,7 @@
 
 # Quick Timer ⏳
 
-Meet Quick Timer – a minimalistic Android app that requires exactly Zero Activities to operate! Set and manage your a directly from Quick Settings – no need for a regular app screen!
+Meet Quick Timer – a minimalistic Android app that requires exactly Zero Activities to operate! Set and manage a timer directly from Quick Settings – no need for a regular app screen!
 
 |![1](https://github.com/user-attachments/assets/eb2f9b97-f1dd-4c5e-9372-4fe3eb433524)|![2](https://github.com/user-attachments/assets/27efc4d1-6294-42c8-8c71-31277f7b5f4d)|![3](https://github.com/user-attachments/assets/3afc431d-6b37-47f6-8caa-cad4fb32b8e8)|
 | :---: | :---: | :---: |
